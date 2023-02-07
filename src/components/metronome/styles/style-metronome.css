@@ -1,0 +1,47 @@
+.metronomo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem;
+  margin: auto;
+  background-color: #1b262c;
+}
+
+.metronomo-options {
+  width: 50%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.metronomo-container-buttons-bpm {
+  display: grid;
+  grid-template-areas:
+    "bpm    bpm   bpm"
+    "menos1 range mas1";
+  gap: 5px;
+  justify-items: center;
+}
+
+.bpm {
+  margin: 0;
+  grid-area: bpm;
+  color: #ed6663;
+  user-select: none;
+  font-weight: bold;
+}
+
+.btn-mas1 {
+  grid-area: mas1;
+}
+
+.btn-menos1 {
+  grid-area: menos1;
+}
+
+.range {
+  cursor: pointer;
+}

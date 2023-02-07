@@ -1,0 +1,42 @@
+.component-list {
+  /*Posicionamiento*/
+  /*Box Model*/
+  display: flex;
+
+  /*Texto*/
+  /*Visuales*/
+  cursor: pointer;
+  color: black;
+  background-color: #eeeeee;
+  border-radius: 7px;
+  /*otros*/
+  transition: ease-in-out all 0.1s;
+}
+
+.component-list:hover {
+  opacity: 0.8;
+}
+
+.component-list-header {
+  width: 100%;
+  text-align: left;
+}
+
+.component-list h4 {
+  margin: inherit;
+}
+
+h4 > span {
+  margin-right: 10px;
+}
+
+.text-preview,
+.date {
+  margin: inherit;
+  padding-left: 5px;
+
+  font-size: 0.8rem;
+  text-align: left;
+
+  color: rgb(131, 124, 124);
+}

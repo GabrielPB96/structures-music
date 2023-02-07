@@ -1,0 +1,21 @@
+.dashboard-nav {
+  justify-content: space-between;
+}
+
+.dashboard-nav-logout {
+  height: 2rem;
+}
+
+.dashboard-nav-links-separator {
+  width: 2px;
+  height: 2rem;
+  display: inline-block;
+
+  background-color: #eeee;
+}
+
+.dashboard-nav-links {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+}

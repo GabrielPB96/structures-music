@@ -1,0 +1,33 @@
+.home-page {
+}
+
+.home-page-nav-contentlinks {
+	height: 100%;
+	padding: 1rem;
+	padding-right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+
+	border-left: 2px solid #eeee;
+}
+
+.home-page-nav {
+	justify-content: end;
+}
+
+/*revisar: dejarlo o quitarlo*/
+.home-page-main {
+	min-width: 100%;
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+}
+
+.home-page-main div {
+	width: 100%;
+	margin-top: auto;
+	padding: 0;
+}
