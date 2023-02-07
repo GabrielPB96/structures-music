@@ -4,7 +4,7 @@ export class User {
 	private _username: string;
 	private _email: string;
 	private _id: string;
-	private _directory: {};
+	private _directory: { [key: string]: Content };
 
 	constructor(username: string, email: string, id: string, directory: {}) {
 		this._id = id;
@@ -27,7 +27,7 @@ export class User {
 	}
 
 	public set addFile(file: Content) {
-		this._directory[file.name] = Content;
+		this._directory[file.name] = file;
 	}
 
 	public set id(id: string) {

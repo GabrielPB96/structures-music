@@ -12,9 +12,11 @@ import DashBoard from "./pages/dashboard/dash-board";
 import { useContext } from "react";
 import AuthContext from "./context/AuthContext";
 import ErrorPage from "./pages/404/error-page";
+import FilesPage from "./pages/user/filesuser/files-page";
+
 const App = () => {
 	const { user } = useContext(AuthContext);
-	console.log(user);
+	//console.log(user);
 	return (
 		<div className="main-app">
 			<Router>
@@ -34,6 +36,14 @@ const App = () => {
 					<Route
 						path="/dashboard"
 						element={user ? <DashBoard /> : <Navigate to="/signIn" />}
+					/>
+					<Route
+						path="/musics"
+						element={user ? <FilesPage /> : <Navigate to="/" />}
+					/>
+					<Route
+						path="/profile"
+						element={user ? <p>PROFILE</p> : <Navigate to="/" />}
 					/>
 					<Route path="/*" element={<ErrorPage />} />
 				</Routes>

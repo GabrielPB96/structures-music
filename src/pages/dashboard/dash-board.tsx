@@ -1,21 +1,30 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 
-import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../firebase/firebase-utils";
+import { Link, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { logout, readDoc } from "../../firebase/firebase-utils";
 
 import "../../styles/style-dashboard-page.css";
+
 import { User } from "../../models/user.class";
 import Profile from "../../components/pure/profile";
+import FilesPage from "../user/filesuser/files-page";
+import BackBtn from "../../components/pure/back-btn";
 
 const DashBoard = () => {
 	const navigation = useNavigate();
 	const { user } = useContext(AuthContext);
-	let U = new User("", "", "", {});
-	if (user)
-		U = new User(user.displayName || "", user.email || "", user?.uid, {});
+	const [USER, setUSER] = useState<User>();
+	let directory = {};
 
-	console.log(user);
+	useEffect(() => {
+		if (user) {
+			setUSER(
+				new User(user.displayName || "", user.email || "", user?.uid, {})
+			);
+		}
+	}, [user]);
+
 	const hadleLogout = async () => {
 		try {
 			let r = await logout();
@@ -31,33 +40,22 @@ const DashBoard = () => {
 			</header>
 			<nav className="dashboard-nav">
 				<div className="dashboard-nav-links">
-					<Link to="">Music</Link>
+					<Link to="/musics">Music</Link>
 					<div className="dashboard-nav-links-separator"></div>
-					<Link to="">Profile</Link>
+					<Link to="/profile">Profile</Link>
 				</div>
-				<button className="dashboard-nav-logout" onClick={hadleLogout}>
-					<span className="dashboard-logout-icon">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="16"
-							height="16"
-							fill="currentColor"
-							viewBox="0 0 16 16"
-						>
-							<path
-								fillRule="evenodd"
-								d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"
-							/>
-							<path
-								fillRule="evenodd"
-								d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"
-							/>
-						</svg>
-					</span>
-				</button>
+				<BackBtn action={hadleLogout} />
 			</nav>
 			<main className="dashboard-main">
-				<Profile user={U} />
+				{USER ? <Profile user={USER} /> : "..."}
+				<section className="content">
+					<p>
+						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam
+						fugit, numquam laudantium similique enim voluptatum eum aliquam
+						praesentium commodi iste! Rerum adipisci enim laudantium vitae,
+						repudiandae temporibus vero totam distinctio!
+					</p>
+				</section>
 			</main>
 		</div>
 	);

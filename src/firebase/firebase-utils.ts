@@ -10,6 +10,16 @@ import {
 	GoogleAuthProvider,
 	signInWithPopup,
 } from "firebase/auth";
+import {
+	getFirestore,
+	collection,
+	addDoc,
+	setDoc,
+	doc,
+	getDoc,
+} from "firebase/firestore";
+import { File } from "../models/structure-files/file.class";
+import { Folder } from "../models/structure-files/folder.class";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyA4rRcYWm6OG7uoZVX6LB6Y8LKmr3Yo6S4",
@@ -22,6 +32,10 @@ const firebaseConfig = {
 	measurementId: "G-58S86KLYQW",
 };
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+
 export const stateChanged = (action: any) => {
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
@@ -33,10 +47,6 @@ export const stateChanged = (action: any) => {
 		}
 	});
 };
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
 
 export const signUp = async (
 	username: string,
@@ -84,3 +94,54 @@ export const singUpGoogle = async () => {
 			console.log(errorMessage);
 		});
 };
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
+
+//console.log(db);
+
+/*async function addUser(username: string, email: string, id: string) {
+	try {
+		const docRef = await addDoc(collection(db, "/users"), {
+			username,
+			email,
+			id,
+		});
+		console.log("Document written with ID: ", docRef.id);
+	} catch (e) {
+		console.error("Error adding document: ", e);
+	}
+}*/
+
+export async function addDocCollection(
+	nameDoc: string,
+	nameCollection: string,
+	data: any
+) {
+	await setDoc(doc(db, nameCollection, nameDoc), data);
+}
+
+export async function createUser(username: string, data: any) {
+	await addDocCollection(username, "users", data);
+}
+
+export function PARSEOBJECT(ob: any) {
+	return JSON.parse(JSON.stringify(ob));
+}
+
+export async function readDoc(collection: string, nameDoc: string) {
+	const docRef = doc(db, collection, nameDoc);
+	const docSnap = await getDoc(docRef);
+	if (docSnap.exists()) {
+		//console.log("Document data:", docSnap.data());
+		return new Promise((solve) => {
+			solve(docSnap.data());
+		});
+	} else {
+		// doc.data() will be undefined in this case
+		//console.log("No such document!");
+		return new Promise((s, r) => {
+			r("NULL DATA");
+		});
+	}
+}

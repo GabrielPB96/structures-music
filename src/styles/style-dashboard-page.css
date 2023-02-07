@@ -1,21 +1,65 @@
+.dashboard-main {
+	min-height: 100%;
+	padding: 2rem;
+	display: grid;
+	grid-template-areas:
+		"card-user"
+		"content";
+	gap: 1rem;
+}
+
 .dashboard-nav {
-  justify-content: space-between;
+	justify-content: space-between;
 }
 
 .dashboard-nav-logout {
-  height: 2rem;
+	height: 2rem;
 }
 
 .dashboard-nav-links-separator {
-  width: 2px;
-  height: 2rem;
-  display: inline-block;
+	width: 2px;
+	height: 2rem;
+	display: inline-block;
 
-  background-color: #eeee;
+	background-color: #eeee;
 }
 
 .dashboard-nav-links {
-  display: flex;
-  justify-content: space-evenly;
-  gap: 0.5rem;
+	display: flex;
+	justify-content: space-evenly;
+	gap: 0.5rem;
+}
+
+.card-user {
+	grid-area: card-user;
+	height: min-content;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	padding: 1rem;
+
+	background-color: #fff;
+	color: black;
+	border-radius: 10px;
+}
+
+.img-user-container img {
+	width: 100%;
+}
+
+.img-user-container {
+	min-width: 120px;
+}
+
+.content {
+	grid-area: content;
+}
+
+.info-user {
+	text-align: center;
+}
+.info-user p {
+	margin: 0;
 }
