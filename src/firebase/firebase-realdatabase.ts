@@ -39,7 +39,10 @@ export async function s(ob: any, idUser: string) {
 
 export async function createUser(uid: string, username: string, email: string) {
 	const newRef = ref(db, `${PATH_USERS}${uid}`);
-	let default_file: File = new File("File");
+	let default_file: File = new File(
+		"File",
+		`${PATH_USERS}${uid}/directory/File`
+	);
 	let directory: { [key: string]: any } = {};
 	directory[default_file.name] = default_file;
 	return set(newRef, {
