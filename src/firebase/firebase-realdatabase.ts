@@ -1,6 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, onValue, update } from "firebase/database";
+import {
+	getDatabase,
+	ref,
+	set,
+	onValue,
+	update,
+	remove,
+} from "firebase/database";
 import { File } from "../models/structure-files/file.class";
 //import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -29,7 +36,6 @@ const PATH_USERS = "/users/";
 export async function s(ob: any, idUser: string) {
 	return set(ref(db, `${PATH_USERS}${idUser}`), ob);
 }
-
 
 export async function createUser(uid: string, username: string, email: string) {
 	const newRef = ref(db, `${PATH_USERS}${uid}`);
@@ -68,4 +74,8 @@ export async function readDataUser(path: string) {
 export async function addFile(file: any, path: string) {
 	const pR = ref(db, `${PATH_USERS}${path}`);
 	return set(pR, file);
+}
+
+export async function removePath(path: string) {
+	return await remove(ref(db, path));
 }
