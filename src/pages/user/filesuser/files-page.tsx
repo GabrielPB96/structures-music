@@ -17,9 +17,9 @@ import { useContext, useEffect, useState } from "react";
 
 //react router
 import AuthContext from "../../../context/AuthContext";
-import { File } from "../../../models/structure-files/file.class";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, set } from "firebase/database";
 import CreateFolder from "../../../components/pure/modal-create-folder";
+import { Folder } from "../../../models/structure-files/folder.class";
 
 interface TypeDirectory {
 	[key: string]: any;
@@ -67,11 +67,15 @@ const FilesPage = () => {
 		return res;
 	};
 
-	const update = () => {
-		let f = JSON.parse(JSON.stringify(new File("Nuevo")));
-		addFile(f, `${user?.uid}/directory/Nuevo`);
+	const createFolder = async (nameFolder: string) => {
+		let path: string = `users/${user?.uid}/directory/${nameFolder}`;
+		let folder: Folder = new Folder(nameFolder, path);
+		//set(ref(db, `${PATH_USERS}${idUser}`), ob)
+		return set(ref(db, path), folder).then((e) => {
+			setModal(false);
+		});
 	};
-	
+
 	return (
 		<div className="page">
 			<header className="header-app header-files">
@@ -83,10 +87,7 @@ const FilesPage = () => {
 			<main className="main-app main-files-user">
 				{renderFiles() ? renderFiles() : "Cargando..."}
 			</main>
-			<button type="button" onClick={update}>
-				Update
-			</button>
-			{modal && <CreateFolder action={() => {}} cancel={setModal} />}
+			{modal && <CreateFolder action={createFolder} cancel={setModal} />}
 		</div>
 	);
 };

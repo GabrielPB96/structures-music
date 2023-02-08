@@ -2,14 +2,12 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import "../../styles/style-modal.css";
-import Icon from "./icon";
-import { iconsPaths } from "../../utils/icons";
 
 const folderSchema = Yup.object().shape({
 	name: Yup.string()
 		.required()
-		.min(6, "Folder name too short")
-		.max(20, "Folder name too long")
+		.min(5, "Folder name too short")
+		.max(50, "Folder name too long")
 		.required("Folder name is required"),
 });
 
@@ -23,7 +21,9 @@ const CreateFolder = ({ cancel, action }: Props) => {
 		name: "",
 	};
 
-	const hadleAction = () => {};
+	const hadleAction = async (name: string) => {
+		return await action(name);
+	};
 
 	const hadleCancel = () => {
 		cancel(false);
@@ -36,6 +36,9 @@ const CreateFolder = ({ cancel, action }: Props) => {
 					validationSchema={folderSchema}
 					onSubmit={async (values: any) => {
 						console.log(values);
+						try {
+							await hadleAction(values.name);
+						} catch (error) {}
 					}}
 				>
 					{({ touched, errors, isSubmitting }) => (
@@ -54,9 +57,7 @@ const CreateFolder = ({ cancel, action }: Props) => {
 							{errors.name && touched.name && (
 								<ErrorMessage name="name" component="div"></ErrorMessage>
 							)}
-							<button type="submit" onClick={hadleAction}>
-								Create Folder
-							</button>
+							<button type="submit">Create Folder</button>
 							<button type="button" onClick={hadleCancel}>
 								Cancel
 							</button>

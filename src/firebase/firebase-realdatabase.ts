@@ -30,6 +30,7 @@ export async function s(ob: any, idUser: string) {
 	return set(ref(db, `${PATH_USERS}${idUser}`), ob);
 }
 
+
 export async function createUser(uid: string, username: string, email: string) {
 	const newRef = ref(db, `${PATH_USERS}${uid}`);
 	let default_file: File = new File("File");
