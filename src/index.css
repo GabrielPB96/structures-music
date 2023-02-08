@@ -126,15 +126,26 @@ input {
 	width: 100%;
 	padding: 0.5rem;
 	padding-left: 2rem;
+
+	text-align: center;
+
 	transition: all ease-in-out 0.3s;
 }
 input:focus {
 	padding-left: 0.5rem;
+
+	text-align: left;
+
 	outline: 2px solid var(--primary-color);
 }
 input:focus + .span-icon-form {
 	display: none;
 }
+
+input:focus::placeholder {
+	background-image: none;
+}
+
 .container-input-label {
 	position: relative;
 
