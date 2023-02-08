@@ -61,6 +61,7 @@ const FilesPage = () => {
 					textPreview={e._textPreview}
 					createDate={e._creationDate}
 					key={`clp${k}`}
+					pathFile={e._path}
 				/>
 			));
 		}

@@ -5,28 +5,54 @@ import Icon from "./icon";
 import { iconsPaths } from "../../utils/icons";
 //styles
 import "../../styles/style-component-list.css";
+import { removePath } from "../../firebase/firebase-realdatabase";
 
 type Props = {
 	title: string;
-	textPreview: string;
+	textPreview?: string | null;
 	createDate: string;
+	paths: string[];
+	pathFile: string;
 };
-const FilePreview = ({ title, textPreview, createDate }: Props) => {
+const FilePreview = ({
+	title,
+	textPreview,
+	createDate,
+	paths,
+	pathFile,
+}: Props) => {
 	const date = createDate;
+	const remove = async () => {
+		await removePath(pathFile);
+		//console.log(pathFile)
+	};
 	return (
 		<div className="component-list">
 			<Link to="">
-				<article className="component-list-header">
-					<header>
+				<article className="component-list-content">
+					<header className="component-list-header">
 						<h4>
 							<span>
-								<Icon paths={iconsPaths.fileMusic} width={16} height={16} />
+								<Icon paths={paths} width={16} height={16} />
 							</span>
 							<span>{title}</span>
 						</h4>
+						{textPreview && <p className="text-preview">{textPreview}</p>}
+						<p className="date">{date}</p>
 					</header>
-					<p className="text-preview">{textPreview}</p>
-					<p className="date">{date}</p>
+					<div className="component-list-options">
+						<button onClick={remove}>
+							<Icon
+								width={16}
+								height={16}
+								paths={iconsPaths.trashFill}
+								color="tomato"
+							/>
+						</button>
+						<button>
+							<Icon width={16} height={16} paths={iconsPaths.pencilFill} />
+						</button>
+					</div>
 				</article>
 			</Link>
 		</div>

@@ -1,43 +1,67 @@
 .component-list {
-  /*Posicionamiento*/
-  /*Box Model*/
-  display: flex;
+	/*Posicionamiento*/
+	/*Box Model*/
+	display: flex;
 
-  /*Texto*/
-  /*Visuales*/
-  cursor: pointer;
-  color: black;
-  background-color: #eeeeee;
-  border-radius: 7px;
-  /*otros*/
-  transition: ease-in-out all 0.1s;
+	/*Texto*/
+	/*Visuales*/
+	cursor: pointer;
+	color: black;
+	background-color: #eeeeee;
+	border-radius: 7px;
+	/*otros*/
+	transition: ease-in-out all 0.1s;
+}
+/* .component-list:hover {
+} */
+.component-list a {
+	width: 100%;
+	border-radius: 7px;
 }
 
-.component-list:hover {
-  opacity: 0.8;
+.component-list a:hover {
+	background-color: inherit;
+}
+
+.component-list-content {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 80% 20%;
+
+	text-align: left;
+	color: black;
 }
 
 .component-list-header {
-  width: 100%;
-  text-align: left;
-  color: black;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
 }
 
 .component-list h4 {
-  margin: inherit;
+	margin: inherit;
 }
 
 h4 > span {
-  margin-right: 10px;
+	margin-right: 10px;
 }
 
 .text-preview,
 .date {
-  margin: inherit;
-  padding-left: 5px;
+	margin: inherit;
+	padding-left: 5px;
 
-  font-size: 0.8rem;
-  text-align: left;
+	font-size: 0.8rem;
+	text-align: left;
 
-  color: rgb(131, 124, 124);
+	color: rgb(131, 124, 124);
+}
+
+.component-list-options {
+	display: grid;
+	grid-template-columns: 45% 45%;
+	align-items: center;
+	gap: 0.3rem;
 }
