@@ -18,37 +18,35 @@ const App = () => {
 	const { user } = useContext(AuthContext);
 	//console.log(user);
 	return (
-		<div className="main-app">
-			<Router>
-				<Routes>
-					<Route
-						path="/"
-						element={user ? <Navigate to="/dashboard" /> : <HomePage />}
-					/>
-					<Route
-						path="/signIn"
-						element={user ? <Navigate to="/dashboard" /> : <LoginPage />}
-					/>
-					<Route
-						path="/signUp"
-						element={user ? <Navigate to="/" /> : <RegisterPage />}
-					/>
-					<Route
-						path="/dashboard"
-						element={user ? <DashBoard /> : <Navigate to="/signIn" />}
-					/>
-					<Route
-						path="/musics"
-						element={user ? <FilesPage /> : <Navigate to="/" />}
-					/>
-					<Route
-						path="/profile"
-						element={user ? <p>PROFILE</p> : <Navigate to="/" />}
-					/>
-					<Route path="/*" element={<ErrorPage />} />
-				</Routes>
-			</Router>
-		</div>
+		<Router>
+			<Routes>
+				<Route
+					path="/"
+					element={!user ? <HomePage /> : <Navigate to="/dashboard" />}
+				/>
+				<Route
+					path="/signIn"
+					element={!user ? <LoginPage /> : <Navigate to="/dashboard" />}
+				/>
+				<Route
+					path="/signUp"
+					element={!user ? <RegisterPage /> : <Navigate to="/" />}
+				/>
+				<Route
+					path="/dashboard"
+					element={user ? <DashBoard /> : <Navigate to="/signIn" />}
+				/>
+				<Route
+					path="/musics"
+					element={user ? <FilesPage /> : <Navigate to="/" />}
+				/>
+				<Route
+					path="/profile"
+					element={user ? <p>PROFILE</p> : <Navigate to="/" />}
+				/>
+				<Route path="/*" element={<ErrorPage />} />
+			</Routes>
+		</Router>
 	);
 };
 

@@ -6,13 +6,11 @@ import { BuilderUser } from "../../../models/builder-user";
 import {
 	signUp,
 	singUpGoogle,
-	createUser,
 	auth,
-	PARSEOBJECT,
 } from "../../../firebase/firebase-utils";
+import { createUser as createU } from "../../../firebase/firebase-realdatabase";
 
 import "../../../styles/style-login.css";
-import { User } from "../../../models/user.class";
 
 const registerSchema = Yup.object().shape({
 	username: Yup.string()
@@ -53,10 +51,11 @@ const Register = () => {
 						await signUp(values.username, values.email, values.password);
 						let uid = auth.currentUser?.uid;
 						if (!uid) throw Error("No se puedo crear el usuario");
-						let newUser = new User(values.username, values.email, uid, {});
-						await createUser(values.username, PARSEOBJECT(newUser));
+						//let newUser = new User(values.username, values.email, uid, {});
+						//await createUser(values.username, PARSEOBJECT(newUser));
+						await createU(uid, values.username, values.email);
 					} catch (error: any) {
-						alert(error.code);
+						alert(`Create User: ${error.code}`);
 					}
 				}}
 			>

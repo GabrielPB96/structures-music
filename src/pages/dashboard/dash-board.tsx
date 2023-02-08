@@ -1,27 +1,30 @@
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 
-import { Link, Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { logout, readDoc } from "../../firebase/firebase-utils";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../firebase/firebase-utils";
 
 import "../../styles/style-dashboard-page.css";
 
 import { User } from "../../models/user.class";
 import Profile from "../../components/pure/profile";
-import FilesPage from "../user/filesuser/files-page";
 import BackBtn from "../../components/pure/back-btn";
 
 const DashBoard = () => {
 	const navigation = useNavigate();
 	const { user } = useContext(AuthContext);
 	const [USER, setUSER] = useState<User>();
-	let directory = {};
 
 	useEffect(() => {
 		if (user) {
-			setUSER(
-				new User(user.displayName || "", user.email || "", user?.uid, {})
-			);
+			setUSER(() => {
+				return new User(
+					user.displayName || "",
+					user.email || "",
+					user?.uid,
+					{}
+				);
+			});
 		}
 	}, [user]);
 
@@ -47,7 +50,7 @@ const DashBoard = () => {
 				<BackBtn action={hadleLogout} />
 			</nav>
 			<main className="dashboard-main">
-				{USER ? <Profile user={USER} /> : "..."}
+				{USER ? <Profile user2={USER} /> : "..."}
 				<section className="content">
 					<p>
 						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam

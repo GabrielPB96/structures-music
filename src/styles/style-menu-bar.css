@@ -1,76 +1,50 @@
 .menu-bar {
-  /*Posicionamiento*/
-  /*Box Model*/
-  width: 100%;
-  padding: 10px;
-  display: grid;
-  grid-template-columns: 70% 30%;
-  justify-content: space-around;
-  /*Texto*/
-  /*Visuales*/
-  background-color: #00425a;
-  /*otros*/
-}
-
-label {
-  /*Posicionamiento*/
-  position: relative;
-  /*Box Model*/
-  width: 100%;
-  /*Texto*/
-  /*Visuales*/
-  /*otros*/
-}
-
-input {
-  /*Posicionamiento*/
-  /*Box Model*/
-  width: 100%;
-  padding: 0.3rem;
-  padding-left: 25px;
-  /*Texto*/
-  /*Visuales*/
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  /*otros*/
-}
-
-input:focus {
-  padding-left: 0.3rem;
-}
-
-input:focus + span {
-  display: none;
+	width: 100%;
+	height: 100%;
+	padding: 0.4rem;
+	display: grid;
+	grid-template-columns: 70% 30%;
+	justify-items: center;
+	align-items: center;
 }
 
 .menu-bar-search-icon {
-  /*Posicionamiento*/
-  position: absolute;
-  top: 2px;
-  left: 3px;
-  /*Box Model*/
-  display: block;
-  /*Texto*/
-  /*Visuales*/
-  color: #837c7c;
-  /*otros*/
+	color: rgb(83, 80, 80);
 }
 
-.menu-bar-options-file {
-  /*Posicionamiento*/
-  position: relative;
-  /*Box Model*/
-  width: 80%;
-  display: flex;
-  justify-content: space-around;
-  /*Texto*/
-  /*Visuales*/
-  /*otros*/
+.menu-bar-options {
+	/*Posicionamiento*/
+	position: relative;
+	/*Box Model*/
+	width: 80%;
+	display: flex;
+	justify-content: space-around;
+	/*Texto*/
+	/*Visuales*/
+	/*otros*/
 }
-.menu-bar-options-file button {
-  transition: ease all 0.3s;
+
+.menu-bar-options button {
+	padding: 0.5rem;
+	transition: all ease-in-out 0.3s;
 }
-.menu-bar-options-file button:hover {
-  transform: scale(1.05);
+.menu-bar-options button:hover {
+	transform: scale(1.05);
 }
+
+.nav-menu-files {
+	padding: 0;
+}
+
+.search {
+	width: 100%;
+	justify-content: center;
+}
+
+.menu-bat-options-files {
+	display: flex;
+}
+
+/*
+  AGREGAR MEDIA QUERIES OJOOOOOOOOOOOOOOOOO
+*/

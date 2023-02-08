@@ -17,6 +17,9 @@ import {
 	setDoc,
 	doc,
 	getDoc,
+	updateDoc,
+	query,
+	getDocs,
 } from "firebase/firestore";
 import { File } from "../models/structure-files/file.class";
 import { Folder } from "../models/structure-files/folder.class";
@@ -145,3 +148,24 @@ export async function readDoc(collection: string, nameDoc: string) {
 		});
 	}
 }
+
+export async function readExactProperty(
+	nameCollection: string,
+	nameDoc: string,
+	property: string
+) {
+	const q = query(collection(db, "users/GabrielPB96/direc"));
+
+	const querySnapshot = await getDocs(q);
+	querySnapshot.forEach((doc) => {
+		// doc.data() is never undefined for query doc snapshots
+		console.log(doc.id, " => ", doc.data());
+	});
+}
+/**
+ * await setDoc(doc(db, "users", "GabrielPB96"), {
+  name: "Los Angeles",
+  state: "CA",
+  country: "USA"
+});
+ */

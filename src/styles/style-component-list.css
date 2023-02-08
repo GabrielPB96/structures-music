@@ -20,6 +20,7 @@
 .component-list-header {
   width: 100%;
   text-align: left;
+  color: black;
 }
 
 .component-list h4 {

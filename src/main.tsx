@@ -8,6 +8,8 @@ import { AuthProvider } from "./context/AuthContext";
 
 //logout();
 
+import {} from "./firebase/firebase-realdatabase";
+
 const o = {
 	_creationDate: "2 de Enero",
 	_music: {

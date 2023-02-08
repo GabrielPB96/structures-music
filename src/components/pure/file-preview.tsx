@@ -7,30 +7,30 @@ import { iconsPaths } from "../../utils/icons";
 import "../../styles/style-component-list.css";
 
 type Props = {
-  title: string;
-  textPreview: string;
-  createDate: string;
+	title: string;
+	textPreview: string;
+	createDate: string;
 };
 const FilePreview = ({ title, textPreview, createDate }: Props) => {
-  const date = createDate;
-  return (
-    <div className="component-list">
-      <Link to={`/home/${title}`}>
-        <article className="component-list-header">
-          <header>
-            <h4>
-              <span>
-                <Icon paths={iconsPaths.fileMusic} width={16} height={16} />
-              </span>
-              <span>{title}</span>
-            </h4>
-          </header>
-          <p className="text-preview">{textPreview}</p>
-          <p className="date">{date}</p>
-        </article>
-      </Link>
-    </div>
-  );
+	const date = createDate;
+	return (
+		<div className="component-list">
+			<Link to="">
+				<article className="component-list-header">
+					<header>
+						<h4>
+							<span>
+								<Icon paths={iconsPaths.fileMusic} width={16} height={16} />
+							</span>
+							<span>{title}</span>
+						</h4>
+					</header>
+					<p className="text-preview">{textPreview}</p>
+					<p className="date">{date}</p>
+				</article>
+			</Link>
+		</div>
+	);
 };
 
 export default FilePreview;

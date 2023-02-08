@@ -5,8 +5,8 @@ type Props = {
 };
 const BackBtn = ({ action }: Props) => {
 	return (
-		<button className="dashboard-nav-logout" onClick={action}>
-			<span className="dashboard-logout-icon">
+		<button onClick={action}>
+			<span>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="16"

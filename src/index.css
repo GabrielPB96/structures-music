@@ -126,9 +126,11 @@ input {
 	width: 100%;
 	padding: 0.5rem;
 	padding-left: 2rem;
+	transition: all ease-in-out 0.3s;
 }
 input:focus {
 	padding-left: 0.5rem;
+	outline: 2px solid var(--primary-color);
 }
 input:focus + .span-icon-form {
 	display: none;
@@ -139,6 +141,7 @@ input:focus + .span-icon-form {
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
+	height: fit-content;
 }
 
 .container-input-icon {

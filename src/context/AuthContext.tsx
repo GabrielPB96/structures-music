@@ -6,6 +6,7 @@ const AuthContext = createContext({ user: auth.currentUser });
 const AuthProvider = ({ children }: any) => {
 	const [user, setUser] = useState(auth.currentUser);
 	useEffect(() => {
+		console.log("auth provider");
 		stateChanged(setUser);
 	}, []);
 	const data = { user };

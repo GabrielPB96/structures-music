@@ -1,4 +1,5 @@
 import { Content } from "./structure-files/content.interface";
+import { File } from "./structure-files/file.class";
 
 export class User {
 	private _username: string;
@@ -26,7 +27,7 @@ export class User {
 		return this._directory;
 	}
 
-	public set addFile(file: Content) {
+	public addFile(file: Content) {
 		this._directory[file.name] = file;
 	}
 
