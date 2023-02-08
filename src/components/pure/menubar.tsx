@@ -24,10 +24,15 @@ const MenuBar = ({ newFolder }: Props) => {
 		<nav className="nav-menu-files">
 			<div className="menu-bar">
 				<div className="search container-input-label ">
-					<input type="search" id="search" placeholder="Search File" />
-					<span className="span-icon-form menu-bar-search-icon">
+					<input
+						type="search"
+						id="search"
+						placeholder="Search File"
+						className="search-input"
+					/>
+					{/* <span className="span-icon-form menu-bar-search-icon">
 						<Icon width={17} height={17} paths={iconsPaths.search} />
-					</span>
+					</span> */}
 				</div>
 
 				<div className="menu-bar-options">
