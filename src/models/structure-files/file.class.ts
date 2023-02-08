@@ -3,9 +3,13 @@ import { Music } from "../music.class";
 import { TypeArchive } from "../type-archive.enum";
 export class File extends Content {
 	private _music: Music;
-	constructor(name: string) {
-		super(name, TypeArchive.FILE);
-		this._music = new Music("", "", "",{bpm:0,compass:0,statePoinst:[]});
+	constructor(name: string, path: string) {
+		super(name, TypeArchive.FILE, path);
+		this._music = new Music("", "", "", {
+			bpm: 0,
+			compass: 0,
+			statePoinst: [],
+		});
 	}
 	public set music(music: Music) {
 		this._music = music;
