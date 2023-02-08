@@ -41,16 +41,13 @@ const CreateFolder = ({ cancel, action }: Props) => {
 					{({ touched, errors, isSubmitting }) => (
 						<Form>
 							<div className="container-input-label">
-								<div className="container-input-icon">
+								<div className="container-input-icon container-folder">
 									<Field
 										id="name"
 										type="text"
 										name="name"
 										placeholder="New Folder"
 									></Field>
-									<span className="span-icon-form">
-										<Icon height={17} width={17} paths={iconsPaths.newFolder} />
-									</span>
 								</div>
 							</div>
 
