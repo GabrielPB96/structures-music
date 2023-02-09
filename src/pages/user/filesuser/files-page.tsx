@@ -7,29 +7,31 @@ import "../../../styles/style-files.css";
 
 //firebase
 //import { readDoc, readExactProperty } from "../../../firebase/firebase-utils";
-import {
-	addFile,
-	db,
-	readDataUser,
-} from "../../../firebase/firebase-realdatabase";
+import { db } from "../../../firebase/firebase-realdatabase";
 //react
 import { useContext, useEffect, useState } from "react";
 
 //react router
 import AuthContext from "../../../context/AuthContext";
-import { onValue, ref, set } from "firebase/database";
+import { onValue, ref } from "firebase/database";
 import CreateFolder from "../../../components/pure/modal-create-folder";
-import { Folder } from "../../../models/structure-files/folder.class";
+import Loading from "../../../components/pure/loading";
 
-interface TypeDirectory {
-	[key: string]: any;
-}
+import {
+	objectToArray,
+	arrayComponentList,
+	createFolderWithPath,
+	Array,
+} from "../../../utils/utils";
+
 const FilesPage = () => {
-	//const us = useLoaderData();
-	//console.log(us);
-
 	const { user } = useContext(AuthContext);
-	const [directory, setDirectory] = useState<TypeDirectory | null>({});
+	/**
+	 * [] -> tipo de dato requerido
+	 * null -> se esta cargando el directorio
+	 * false -> no existe directory
+	 */
+	const [directory, setDirectory] = useState<Array[] | null | false>(null);
 	const [modal, setModal] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -37,44 +39,21 @@ const FilesPage = () => {
 			const refDirectory = ref(db, `users/${user.uid}/directory`);
 			onValue(refDirectory, (snapshot) => {
 				const data = snapshot.val();
-				setDirectory(data);
+				let list = objectToArray(data);
+				if (list) setDirectory(list);
+				else setDirectory(false);
 			});
 		}
 	}, []);
 
-	const renderList = () => {
-		let list: any = [];
-		for (let ob in directory) {
-			list.push(directory[ob]);
-		}
-
-		return list.length ? list : null;
-	};
-	const renderFiles = () => {
-		let list = renderList();
-		let res = null;
-		if (list) {
-			res = renderList().map((e: any, k: number) => (
-				<ComponentList
-					type={e._type}
-					title={e._name}
-					textPreview={e._textPreview}
-					createDate={e._creationDate}
-					key={`clp${k}`}
-					pathFile={e._path}
-				/>
-			));
-		}
-		return res;
-	};
-
 	const createFolder = async (nameFolder: string) => {
-		let path: string = `users/${user?.uid}/directory/${nameFolder}`;
-		let folder: Folder = new Folder(nameFolder, path);
-		//set(ref(db, `${PATH_USERS}${idUser}`), ob)
-		return set(ref(db, path), folder).then((e) => {
+		try {
+			let absolutePath: string = `users/${user?.uid}/directory/${nameFolder}`;
+			await createFolderWithPath(nameFolder, absolutePath);
 			setModal(false);
-		});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
@@ -86,7 +65,13 @@ const FilesPage = () => {
 			<MenuBar newFolder={setModal} />
 
 			<main className="main-app main-files-user">
-				{renderFiles() ? renderFiles() : "Cargando..."}
+				{directory ? (
+					arrayComponentList(directory)
+				) : directory === false ? (
+					<p>Empty</p>
+				) : (
+					<Loading />
+				)}
 			</main>
 			{modal && <CreateFolder action={createFolder} cancel={setModal} />}
 		</div>
