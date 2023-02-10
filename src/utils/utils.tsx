@@ -75,3 +75,20 @@ export const getEmailNormalize = (username: string) => {
 	const email = `${headerEmail}@gmail.com`;
 	return email;
 };
+
+export const capitalize = (text: string) => {
+	const firstLetter = text.charAt(0);
+	const newText = firstLetter.toUpperCase() + text.slice(1);
+	return newText;
+};
+
+export const getUserNameFromEmail = (email: string) => {
+	const headerEmail: string = email.split("@")[0];
+	const names: string[] = headerEmail.split("_");
+	let username: string = "";
+	names.forEach((name, i) => {
+		username += capitalize(name);
+		if (i !== names.length - 1) username += " ";
+	});
+	return username;
+};

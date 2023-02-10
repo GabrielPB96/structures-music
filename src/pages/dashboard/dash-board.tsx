@@ -9,6 +9,7 @@ import "../../styles/style-dashboard-page.css";
 import { User } from "../../models/user.class";
 import Profile from "../../components/pure/profile";
 import BackBtn from "../../components/pure/back-btn";
+import { getUserNameFromEmail } from "../../utils/utils";
 
 const DashBoard = () => {
 	const navigation = useNavigate();
@@ -19,7 +20,7 @@ const DashBoard = () => {
 		if (user) {
 			setUSER(() => {
 				return new User(
-					user.displayName || "",
+					user.displayName || getUserNameFromEmail(user.email),
 					user.email || "",
 					user?.uid,
 					{}
