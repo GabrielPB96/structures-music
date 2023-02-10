@@ -9,6 +9,7 @@ import {
 	remove,
 } from "firebase/database";
 import { File } from "../models/structure-files/file.class";
+import { getEmailNormalize } from "../utils/utils";
 //import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -37,13 +38,14 @@ export async function s(ob: any, idUser: string) {
 	return set(ref(db, `${PATH_USERS}${idUser}`), ob);
 }
 
-export async function createUser(uid: string, username: string, email: string) {
+export async function createUser(uid: string, username: string) {
 	const newRef = ref(db, `${PATH_USERS}${uid}`);
 	let default_file: File = new File(
 		"File",
 		`${PATH_USERS}${uid}/directory/File`
 	);
 	let directory: { [key: string]: any } = {};
+	const email = getEmailNormalize(username);
 	directory[default_file.name] = default_file;
 	return set(newRef, {
 		uid,

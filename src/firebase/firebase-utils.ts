@@ -21,8 +21,7 @@ import {
 	query,
 	getDocs,
 } from "firebase/firestore";
-import { File } from "../models/structure-files/file.class";
-import { Folder } from "../models/structure-files/folder.class";
+import { getEmailNormalize, normalizeUserName } from "../utils/utils";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyA4rRcYWm6OG7uoZVX6LB6Y8LKmr3Yo6S4",
@@ -39,15 +38,34 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
+export const getCurrentAuth = () => {
+	return new Promise((solve) => {
+		const currentAuth = getAuth(app);
+		solve(currentAuth);
+	});
+};
+
 export const stateChanged = (action: any) => {
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			action(user);
-			console.log("sing in");
+			//console.log("sing in");
 		} else {
 			action(null);
-			console.log("logout");
+			//console.log("logout");
 		}
+	});
+};
+
+export const signUpUserPassword = async (
+	username: string,
+	password: string
+) => {
+	const email = getEmailNormalize(username);
+	await createUserWithEmailAndPassword(auth, email, password);
+	let user: any = auth.currentUser;
+	await updateProfile(user, {
+		displayName: username,
 	});
 };
 
@@ -99,7 +117,7 @@ export const singUpGoogle = async () => {
 };
 
 // Initialize Cloud Firestore and get a reference to the service
-const db = getFirestore(app);
+const fs = getFirestore(app);
 
 //console.log(db);
 
@@ -121,7 +139,7 @@ export async function addDocCollection(
 	nameCollection: string,
 	data: any
 ) {
-	await setDoc(doc(db, nameCollection, nameDoc), data);
+	await setDoc(doc(fs, nameCollection, nameDoc), data);
 }
 
 export async function createUser(username: string, data: any) {
@@ -133,7 +151,7 @@ export function PARSEOBJECT(ob: any) {
 }
 
 export async function readDoc(collection: string, nameDoc: string) {
-	const docRef = doc(db, collection, nameDoc);
+	const docRef = doc(fs, collection, nameDoc);
 	const docSnap = await getDoc(docRef);
 	if (docSnap.exists()) {
 		//console.log("Document data:", docSnap.data());
@@ -154,7 +172,7 @@ export async function readExactProperty(
 	nameDoc: string,
 	property: string
 ) {
-	const q = query(collection(db, "users/GabrielPB96/direc"));
+	const q = query(collection(fs, "users/GabrielPB96/direc"));
 
 	const querySnapshot = await getDocs(q);
 	querySnapshot.forEach((doc) => {

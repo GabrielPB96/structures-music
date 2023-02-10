@@ -63,3 +63,15 @@ export const sortListFiles = (array: Array[]) => {
 	}
 	return res;
 };
+
+export const normalizeUserName = (userName: string) => {
+	const lowerUserName = userName.toLowerCase();
+	const userNameFormat = lowerUserName.split(" ").join("_");
+	return userNameFormat;
+};
+
+export const getEmailNormalize = (username: string) => {
+	const headerEmail = normalizeUserName(username);
+	const email = `${headerEmail}@gmail.com`;
+	return email;
+};

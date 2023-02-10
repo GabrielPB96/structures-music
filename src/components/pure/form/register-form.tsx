@@ -3,8 +3,13 @@ import * as Yup from "yup";
 
 import { BuilderUser } from "../../../models/builder-user";
 
-import { signUp, singUpGoogle, auth } from "../../../firebase/firebase-utils";
-import { createUser as createU } from "../../../firebase/firebase-realdatabase";
+import {
+	signUp,
+	singUpGoogle,
+	auth,
+	signUpUserPassword,
+} from "../../../firebase/firebase-utils";
+import { createUser } from "../../../firebase/firebase-realdatabase";
 
 import "../../../styles/style-login.css";
 
@@ -13,9 +18,6 @@ const registerSchema = Yup.object().shape({
 		.min(6, "Username too short")
 		.max(20, "Username too long")
 		.required("Username is required"),
-	email: Yup.string()
-		.email("Invalid email format")
-		.required("Email is required"),
 	password: Yup.string()
 		.min(8, "Password too short")
 		.required("Password is required"),
@@ -31,7 +33,6 @@ const Register = () => {
 	const user = new BuilderUser();
 	const initialValues = {
 		username: "",
-		email: "",
 		password: "",
 		confirm: "", // to confirm password
 	};
@@ -44,12 +45,10 @@ const Register = () => {
 				// ** onSubmit Event
 				onSubmit={async (values: any) => {
 					try {
-						await signUp(values.username, values.email, values.password);
+						await signUpUserPassword(values.username, values.password);
 						let uid = auth.currentUser?.uid;
 						if (!uid) throw Error("No se puedo crear el usuario");
-						//let newUser = new User(values.username, values.email, uid, {});
-						//await createUser(values.username, PARSEOBJECT(newUser));
-						await createU(uid, values.username, values.email);
+						await createUser(uid, values.username);
 					} catch (error: any) {
 						alert(`Create User: ${error.code}`);
 					}
@@ -77,23 +76,6 @@ const Register = () => {
 						</div>
 						{errors.username && touched.username && (
 							<ErrorMessage name="username" component="div"></ErrorMessage>
-						)}
-
-						<div className="container-input-label">
-							<label htmlFor="email">Email</label>
-							<div className="container-input-icon container-email">
-								<Field
-									id="email"
-									type="email"
-									name="email"
-									placeholder="example@email.com"
-								/>
-							</div>
-						</div>
-
-						{/* Email Errors */}
-						{errors.email && touched.email && (
-							<ErrorMessage name="email" component="div"></ErrorMessage>
 						)}
 						<div className="container-input-label">
 							<label htmlFor="password">Password</label>
