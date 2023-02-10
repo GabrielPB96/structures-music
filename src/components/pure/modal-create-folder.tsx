@@ -35,7 +35,6 @@ const CreateFolder = ({ cancel, action }: Props) => {
 					initialValues={initialValues}
 					validationSchema={folderSchema}
 					onSubmit={async (values: any) => {
-						console.log(values);
 						try {
 							await hadleAction(values.name);
 						} catch (error) {}

@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { MouseEventHandler, useEffect, useState } from "react";
+import Loading from "./loading";
 
 type Props = {
 	message: string;
@@ -42,60 +43,43 @@ const styleMessage: React.CSSProperties = {
 	textAlign: "center",
 };
 
-let state: null | boolean;
-let id: any = undefined;
-
-const actionModal = () => {
-	return new Promise((solve) => {
-		id = setInterval(() => {
-			if (state !== null) {
-				clearInterval(id);
-				//console.log("FIN");
-				solve(state);
-			}
-			//console.log("run");
-		}, 1000);
-	});
-};
-
-const ConfirmModal = ({ message, accept, cancel }: Props) => {
-	 useEffect(() => {
-	 	state = null;
-	 	actionModal().then((state) => {
-	 		if (state) {
-	 			accept();
-	 		} else {
-	 			cancel();
-	 		}
-	 	});
-	 	return () => {
-	 		clearInterval(id);
-	 	};
-	 }, []);
+const Confirm = ({ message, accept, cancel }: Props) => {
 	return (
 		<div className="confirm-modal" style={styleModal}>
 			<section style={styleContainer}>
 				<p style={styleMessage}>{message}</p>
 				<div className="container-options" style={styleOptions}>
-					<button
-						type="button"
-						onClick={() => {
-							state = true;
-						}}
-					>
+					<button type="button" onClick={() => accept()}>
 						Accept
 					</button>
-					<button
-						type="button"
-						onClick={() => {
-							state = false;
-						}}
-					>
+					<button type="button" onClick={() => cancel()}>
 						Cancel
 					</button>
 				</div>
 			</section>
 		</div>
+	);
+};
+
+const ConfirmModal = ({ message, accept, cancel }: Props) => {
+	const [run, setRun] = useState<boolean>(false);
+	const hadleAction = async (fun: Function) => {
+		setRun(true);
+		await fun();
+		setRun(false);
+	};
+	return (
+		<>
+			{run ? (
+				<Loading />
+			) : (
+				<Confirm
+					message={message}
+					accept={() => hadleAction(accept)}
+					cancel={() => hadleAction(cancel)}
+				/>
+			)}
+		</>
 	);
 };
 

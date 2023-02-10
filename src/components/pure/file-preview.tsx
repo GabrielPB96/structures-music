@@ -5,9 +5,6 @@ import Icon from "./icon";
 import { iconsPaths } from "../../utils/icons";
 //styles
 import "../../styles/style-component-list.css";
-import { removePath } from "../../firebase/firebase-realdatabase";
-import { useState } from "react";
-import ConfirmModal from "./confirm-modal";
 
 type Props = {
 	title: string;
@@ -15,6 +12,7 @@ type Props = {
 	createDate: string;
 	paths: string[];
 	pathFile: string;
+	actionRemove: Function;
 };
 const FilePreview = ({
 	title,
@@ -22,12 +20,11 @@ const FilePreview = ({
 	createDate,
 	paths,
 	pathFile,
+	actionRemove,
 }: Props) => {
 	const date = createDate;
-	const [modal, setModal] = useState<boolean>(false);
 	const remove = async () => {
-		await removePath(pathFile);
-		setModal(false);
+		await actionRemove(pathFile);
 	};
 	return (
 		<div className="component-list">
@@ -44,7 +41,7 @@ const FilePreview = ({
 						<p className="date">{date}</p>
 					</header>
 					<div className="component-list-options">
-						<button onClick={() => setModal(true)}>
+						<button onClick={remove}>
 							<Icon
 								width={16}
 								height={16}
@@ -58,13 +55,6 @@ const FilePreview = ({
 					</div>
 				</article>
 			</Link>
-			{modal && (
-				<ConfirmModal
-					message="¿Esta Seguro?"
-					accept={remove}
-					cancel={() => setModal(false)}
-				/>
-			)}
 		</div>
 	);
 };

@@ -16,7 +16,10 @@ export const objectToArray = (directory: TypeDirectory) => {
 	return list.length ? sortListFiles(list) : null;
 };
 
-export const arrayComponentList = (directory: TypeDirectory[]) => {
+export const arrayComponentList = (
+	directory: TypeDirectory[],
+	actionRemove: Function
+) => {
 	let res: any[] = [];
 	if (directory) {
 		res = directory.map((e: any, k: number) => (
@@ -27,6 +30,7 @@ export const arrayComponentList = (directory: TypeDirectory[]) => {
 				createDate={e._creationDate}
 				key={`clp${k}`}
 				pathFile={e._path}
+				actionRemove={actionRemove}
 			/>
 		));
 	}

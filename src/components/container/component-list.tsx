@@ -11,6 +11,7 @@ type Props = {
 	textPreview?: string | null;
 	createDate: string;
 	pathFile: string;
+	actionRemove: Function;
 };
 const ComponentList = ({
 	type,
@@ -18,6 +19,7 @@ const ComponentList = ({
 	textPreview,
 	createDate,
 	pathFile,
+	actionRemove,
 }: Props) => {
 	let component: any;
 	let paths =
@@ -29,6 +31,7 @@ const ComponentList = ({
 			createDate={createDate}
 			paths={paths}
 			pathFile={pathFile}
+			actionRemove={actionRemove}
 		/>
 	);
 	return component;

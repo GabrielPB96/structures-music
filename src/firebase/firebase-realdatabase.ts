@@ -79,6 +79,6 @@ export async function addFile(file: any, path: string) {
 	return set(pR, file);
 }
 
-export async function removePath(path: string) {
+export async function removeFileWithPath(path: string) {
 	return await remove(ref(db, path));
 }

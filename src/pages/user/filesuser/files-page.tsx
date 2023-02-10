@@ -7,7 +7,10 @@ import "../../../styles/style-files.css";
 
 //firebase
 //import { readDoc, readExactProperty } from "../../../firebase/firebase-utils";
-import { db } from "../../../firebase/firebase-realdatabase";
+import {
+	db,
+	removeFileWithPath,
+} from "../../../firebase/firebase-realdatabase";
 //react
 import { useContext, useEffect, useState } from "react";
 
@@ -23,6 +26,7 @@ import {
 	createFolderWithPath,
 	Array,
 } from "../../../utils/utils";
+import ConfirmModal from "../../../components/pure/confirm-modal";
 
 const FilesPage = () => {
 	const { user } = useContext(AuthContext);
@@ -32,7 +36,9 @@ const FilesPage = () => {
 	 * false -> no existe directory
 	 */
 	const [directory, setDirectory] = useState<Array[] | null | false>(null);
-	const [modal, setModal] = useState<boolean>(false);
+	const [modalCreate, setModalCreate] = useState<boolean>(false);
+	const [modalConfirmRemove, setModalConfirmRemove] = useState<boolean>(false);
+	const [currentPath, setCurrentPath] = useState<string>("");
 
 	useEffect(() => {
 		if (user) {
@@ -50,10 +56,20 @@ const FilesPage = () => {
 		try {
 			let absolutePath: string = `users/${user?.uid}/directory/${nameFolder}`;
 			await createFolderWithPath(nameFolder, absolutePath);
-			setModal(false);
+			setModalCreate(false);
 		} catch (error) {
 			console.error(error);
 		}
+	};
+
+	const hadleRemove = async (absolutePath: string) => {
+		setCurrentPath(absolutePath);
+		setModalConfirmRemove(true);
+	};
+
+	const removeFile = async () => {
+		await removeFileWithPath(currentPath);
+		setModalConfirmRemove(false);
 	};
 
 	return (
@@ -62,18 +78,27 @@ const FilesPage = () => {
 				<h1>Music Structures</h1>
 			</header>
 
-			<MenuBar newFolder={setModal} />
+			<MenuBar newFolder={setModalCreate} />
 
 			<main className="main-app main-files-user">
 				{directory ? (
-					arrayComponentList(directory)
+					arrayComponentList(directory, hadleRemove)
 				) : directory === false ? (
 					<p>Empty</p>
 				) : (
 					<Loading />
 				)}
 			</main>
-			{modal && <CreateFolder action={createFolder} cancel={setModal} />}
+			{modalCreate && (
+				<CreateFolder action={createFolder} cancel={setModalCreate} />
+			)}
+			{modalConfirmRemove && (
+				<ConfirmModal
+					message="¿Estas seguro?"
+					accept={removeFile}
+					cancel={() => setModalConfirmRemove(false)}
+				/>
+			)}
 		</div>
 	);
 };
