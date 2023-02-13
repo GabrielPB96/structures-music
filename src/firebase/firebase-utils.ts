@@ -6,7 +6,7 @@ import {
 	signInWithEmailAndPassword,
 	onAuthStateChanged,
 	signOut,
-	updateProfile,
+	updateProfile as updateP,
 	GoogleAuthProvider,
 	signInWithPopup,
 } from "firebase/auth";
@@ -19,7 +19,7 @@ import {
 	query,
 	getDocs,
 } from "firebase/firestore";
-import { getEmailNormalize} from "../utils/utils";
+import { getEmailNormalize } from "../utils/utils";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyA4rRcYWm6OG7uoZVX6LB6Y8LKmr3Yo6S4",
@@ -64,7 +64,7 @@ export const signUpUserPassword = async (
 	const email = getEmailNormalize(username);
 	await createUserWithEmailAndPassword(auth, email, password);
 	let user: any = auth.currentUser;
-	await updateProfile(user, {
+	await updateP(user, {
 		displayName: username,
 	});
 };
@@ -106,6 +106,16 @@ export const singUpGoogle = async () => {
 			// ...
 			console.log(errorMessage);
 		});
+};
+
+type UserUpdate = {
+	displayName?: string;
+	email?: string;
+	photoURL?: string;
+};
+export const updateProfile = async (userData: UserUpdate) => {
+	let user: any = auth.currentUser;
+	return updateP(user, userData);
 };
 
 // Initialize Cloud Firestore and get a reference to the service

@@ -6,6 +6,7 @@ const AuthContext = createContext({
 		displayName: "",
 		email: "",
 		uid: "",
+		photoURL: "",
 	},
 	pathFile: "",
 	setPathFile: (newPath: string) => {},
