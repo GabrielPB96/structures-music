@@ -14,6 +14,7 @@ import AuthContext from "./context/AuthContext";
 import ErrorPage from "./pages/404/error-page";
 import FilesPage from "./pages/user/filesuser/files-page";
 import FolderContentView from "./components/pure/folder-contentview";
+import EditProfile from "./components/container/edit-profile";
 
 const App = () => {
 	const { user } = useContext(AuthContext);
@@ -23,27 +24,35 @@ const App = () => {
 			<Routes>
 				<Route
 					path="/"
-					element={!user ? <HomePage /> : <Navigate to="/dashboard" replace={true}/>}
+					element={
+						!user ? <HomePage /> : <Navigate to="/dashboard" replace={true} />
+					}
 				/>
 				<Route
 					path="/signIn"
-					element={!user ? <LoginPage /> : <Navigate to="/dashboard" replace={true}/>}
+					element={
+						!user ? <LoginPage /> : <Navigate to="/dashboard" replace={true} />
+					}
 				/>
 				<Route
 					path="/signUp"
-					element={!user ? <RegisterPage /> : <Navigate to="/" replace={true}/>}
+					element={
+						!user ? <RegisterPage /> : <Navigate to="/" replace={true} />
+					}
 				/>
 				<Route
 					path="/dashboard"
-					element={user ? <DashBoard /> : <Navigate to="/signIn" replace={true}/>}
+					element={
+						user ? <DashBoard /> : <Navigate to="/signIn" replace={true} />
+					}
 				/>
 				<Route
 					path="/musics"
-					element={user ? <FilesPage /> : <Navigate to="/" replace={true}/>}
+					element={user ? <FilesPage /> : <Navigate to="/" replace={true} />}
 				/>
 				<Route
 					path="/profile"
-					element={user ? <p>PROFILE</p> : <Navigate to="/" replace={true}/>}
+					element={user ? <EditProfile /> : <Navigate to="/" replace={true} />}
 				/>
 				<Route path="/musics/:path" element={<FilesPage />} />
 				<Route path="/*" element={<ErrorPage />} />
