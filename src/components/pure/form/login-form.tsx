@@ -30,10 +30,9 @@ const Login = () => {
 				// ** onSubmit Event
 				onSubmit={async (values, { resetForm }) => {
 					try {
-						await signIn(values.email, values.password).then((e) => {
-							navigate("/dashboard");
-							resetForm();
-						});
+						await signIn(values.email, values.password);
+						navigate("/dashboard");
+						resetForm();
 					} catch (error: any) {
 						alert(error.code);
 					}

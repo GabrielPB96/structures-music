@@ -3,8 +3,8 @@ import { Music } from "../music.class";
 import { TypeArchive } from "../type-archive.enum";
 export class File extends Content {
 	private _music: Music;
-	constructor(name: string, path: string) {
-		super(name, TypeArchive.FILE, path);
+	constructor(name: string, path: string, creationDate?: string) {
+		super(name, TypeArchive.FILE, path, creationDate);
 		this._music = new Music("", "", "", {
 			bpm: 0,
 			compass: 0,

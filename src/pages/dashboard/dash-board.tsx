@@ -20,7 +20,7 @@ const DashBoard = () => {
 		if (user) {
 			setUSER(() => {
 				return new User(
-					user.displayName || getUserNameFromEmail(user.email),
+					user.displayName || getUserNameFromEmail(user.email || ""),
 					user.email || "",
 					user?.uid,
 					{}

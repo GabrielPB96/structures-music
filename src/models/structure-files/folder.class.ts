@@ -3,8 +3,8 @@ import { Content } from "./content.interface";
 
 export class Folder extends Content {
 	private _children: { [key: string]: Content };
-	constructor(name: string, path: string) {
-		super(name, TypeArchive.FOLDER, path);
+	constructor(name: string, path: string, creationDate?: string) {
+		super(name, TypeArchive.FOLDER, path, creationDate);
 		this._children = {};
 	}
 	public get children() {

@@ -1,4 +1,3 @@
-import ComponentList from "../../../components/container/component-list";
 //import Metronome from "./components/metronome/components/container/metronome";
 import MenuBar from "../../../components/pure/menubar";
 
@@ -16,7 +15,7 @@ import { useContext, useEffect, useState } from "react";
 
 //react router
 import AuthContext from "../../../context/AuthContext";
-import { onValue, ref } from "firebase/database";
+import { off, onValue, ref } from "firebase/database";
 import CreateFolder from "../../../components/pure/modal-create-folder";
 import Loading from "../../../components/pure/loading";
 
@@ -25,11 +24,12 @@ import {
 	arrayComponentList,
 	createFolderWithPath,
 	Array,
+	lastFileFromUrl,
 } from "../../../utils/utils";
 import ConfirmModal from "../../../components/pure/confirm-modal";
 
 const FilesPage = () => {
-	const { user } = useContext(AuthContext);
+	const { user, pathFile } = useContext(AuthContext);
 	/**
 	 * [] -> tipo de dato requerido
 	 * null -> se esta cargando el directorio
@@ -41,24 +41,31 @@ const FilesPage = () => {
 	const [currentPath, setCurrentPath] = useState<string>("");
 
 	useEffect(() => {
-		if (user) {
-			const refDirectory = ref(db, `users/${user.uid}/directory`);
-			onValue(refDirectory, (snapshot) => {
+		const callBackOnValue = (snapshot: any) => {
+			try {
 				const data = snapshot.val();
-				let list = objectToArray(data);
+				let list = data._children && objectToArray(data._children);
 				if (list) setDirectory(list);
 				else setDirectory(false);
-			});
+			} catch (error) {
+				console.log("error : Read folder");
+			}
+		};
+		const refDirectory = ref(db, pathFile);
+		if (user) {
+			onValue(refDirectory, callBackOnValue);
 		}
-	}, []);
+		return () => {
+			off(refDirectory, "value", callBackOnValue);
+		};
+	}, [pathFile]);
 
 	const createFolder = async (nameFolder: string) => {
 		try {
-			let absolutePath: string = `users/${user?.uid}/directory/${nameFolder}`;
-			await createFolderWithPath(nameFolder, absolutePath);
+			await createFolderWithPath(nameFolder, `${pathFile}`);
 			setModalCreate(false);
 		} catch (error) {
-			console.error(error);
+			console.error("error al crear folder");
 		}
 	};
 
@@ -75,10 +82,13 @@ const FilesPage = () => {
 	return (
 		<div className="page">
 			<header className="header-app header-files">
-				<h1>Music Structures</h1>
+				<h1>{lastFileFromUrl(pathFile)}</h1>
 			</header>
 
-			<MenuBar newFolder={setModalCreate} />
+			<MenuBar
+				newFolder={setModalCreate}
+				currentFolder={directory}
+			/>
 
 			<main className="main-app main-files-user">
 				{directory ? (

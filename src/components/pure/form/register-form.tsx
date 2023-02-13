@@ -12,6 +12,7 @@ import {
 import { createUser } from "../../../firebase/firebase-realdatabase";
 
 import "../../../styles/style-login.css";
+import { useNavigate } from "react-router-dom";
 
 const registerSchema = Yup.object().shape({
 	username: Yup.string()
@@ -30,7 +31,7 @@ const registerSchema = Yup.object().shape({
 });
 
 const Register = () => {
-	const user = new BuilderUser();
+	const navigation = useNavigate();
 	const initialValues = {
 		username: "",
 		password: "",
@@ -49,6 +50,7 @@ const Register = () => {
 						let uid = auth.currentUser?.uid;
 						if (!uid) throw Error("No se puedo crear el usuario");
 						await createUser(uid, values.username);
+						navigation("/dashboard");
 					} catch (error: any) {
 						alert(`Create User: ${error.code}`);
 					}

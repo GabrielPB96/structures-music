@@ -29,7 +29,7 @@ const ComponentList = ({
 			title={title}
 			textPreview={textPreview || null}
 			createDate={createDate}
-			paths={paths}
+			pathsIcons={paths}
 			pathFile={pathFile}
 			actionRemove={actionRemove}
 		/>

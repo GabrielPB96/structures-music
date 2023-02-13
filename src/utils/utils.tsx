@@ -3,12 +3,13 @@ import ComponentList from "../components/container/component-list";
 import { Folder } from "../models/structure-files/folder.class";
 import { db } from "../firebase/firebase-realdatabase";
 import { File } from "../models/structure-files/file.class";
+import { TypeArchive } from "../models/type-archive.enum";
 
 interface TypeDirectory {
 	[key: string]: any;
 }
-export const objectToArray = (directory: TypeDirectory) => {
-	let list: any = [];
+export const objectToArray = (directory: TypeDirectory): Array[] | null => {
+	let list: Array[] = [];
 	for (let ob in directory) {
 		list.push(directory[ob]);
 	}
@@ -41,8 +42,14 @@ export const createFolderWithPath = async (
 	nameFolder: string,
 	absolutePath: string
 ) => {
-	let folder: Folder = new Folder(nameFolder, absolutePath);
-	return await set(ref(db, absolutePath), JSON.parse(JSON.stringify(folder)));
+	let folder: Folder = new Folder(
+		nameFolder,
+		`${absolutePath}/_children/${nameFolder}`
+	);
+	return set(
+		ref(db, `${absolutePath}/_children/${nameFolder}`),
+		JSON.parse(JSON.stringify(folder))
+	);
 };
 
 export type Array = {
@@ -50,9 +57,9 @@ export type Array = {
 	_name: string;
 	_path: string;
 	_type: string;
-	_directory?: {};
+	_children: { [key: string]: any };
 };
-export const sortListFiles = (array: Array[]) => {
+export const sortListFiles = (array: Array[]): Array[] => {
 	let res: Array[] = [];
 	for (let o of array) {
 		if (o._type === "file") {
@@ -91,4 +98,54 @@ export const getUserNameFromEmail = (email: string) => {
 		if (i !== names.length - 1) username += " ";
 	});
 	return username;
+};
+
+export const lastFileFromUrl = (url: string) => {
+	const cleanUrl = url.split("/").pop();
+	return cleanUrl;
+};
+export const removeLastFileFromPath = (path: string) => {
+	const pathArray = path.split("/");
+	if (pathArray[pathArray.length - 1] !== "directory") {
+		pathArray.pop();
+		pathArray.pop();
+	}
+	return pathArray.join("/");
+};
+
+type ObjectFolder = {
+	_name: string;
+	_path: string;
+	_children: { [key: string]: any };
+	_type: string;
+};
+const objetoFolderToFolder = (ob: ObjectFolder) => {
+	let fold = new Folder(ob._name, ob._path);
+	if (ob._children) {
+		for (let childKey in ob._children) {
+			let child = ob._children[childKey];
+			if (child._type === TypeArchive.FILE) {
+				fold.add(new File(child.name, child.path));
+			} else {
+				let childFold = objetoFolderToFolder(child);
+				fold.add(childFold);
+			}
+		}
+	}
+	return fold;
+};
+
+export const searchFile = (fold: Array[], nameFile: string): Array[] => {
+	let filesMacht: Array[] = [];
+	let file: Array;
+	for (file of fold) {
+		if (file._name.toLowerCase().startsWith(nameFile.toLowerCase())) {
+			filesMacht.push(file);
+		}
+		if (file._children) {
+			let newFold: Array[] | null = objectToArray(file._children);
+			if (newFold) filesMacht.push(...searchFile(newFold, nameFile));
+		}
+	}
+	return filesMacht;
 };

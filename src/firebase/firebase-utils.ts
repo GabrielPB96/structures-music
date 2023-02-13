@@ -45,13 +45,15 @@ export const getCurrentAuth = () => {
 	});
 };
 
-export const stateChanged = (action: any) => {
+export const stateChanged = (setUser: any, setPathFile: any) => {
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
-			action(user);
+			setUser(user);
+			setPathFile(`users/${user.uid}/directory`);
 			//console.log("sing in");
 		} else {
-			action(null);
+			setUser(null);
+			setPathFile("");
 			//console.log("logout");
 		}
 	});

@@ -1,11 +1,20 @@
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
+import { removeLastFileFromPath } from "../../utils/utils";
 
 type Props = {
-	action: MouseEventHandler;
+	action?: MouseEventHandler;
 };
 const BackBtn = ({ action }: Props) => {
+	const { setPathFile, pathFile } = useContext(AuthContext);
+	const navigation = useNavigate();
+	const back = () => {
+		navigation(-1);
+		setPathFile(removeLastFileFromPath(pathFile));
+	};
 	return (
-		<button onClick={action}>
+		<button onClick={action || back}>
 			<span>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

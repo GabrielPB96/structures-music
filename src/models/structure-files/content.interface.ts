@@ -1,14 +1,14 @@
 import { CustomDate } from "../date";
 
 export abstract class Content {
-	protected _name: string;
-	protected _creationDate: string;
-	protected _type: string;
-	protected _path: string;
+	_name: string;
+	_creationDate: string;
+	_type: string;
+	_path: string;
 
-	constructor(name: string, type: string, path: string) {
+	constructor(name: string, type: string, path: string, creationDate?: string) {
 		this._name = name;
-		this._creationDate = new CustomDate().format;
+		this._creationDate = creationDate || new CustomDate().format;
 		this._type = type;
 		this._path = path;
 	}
@@ -20,6 +20,9 @@ export abstract class Content {
 	}
 	public get creationDate(): string {
 		return this._creationDate;
+	}
+	public get path() {
+		return this._path;
 	}
 
 	public abstract size(): number;

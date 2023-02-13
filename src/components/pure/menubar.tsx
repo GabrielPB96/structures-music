@@ -5,21 +5,24 @@ import "../../styles/style-menu-bar.css";
 //utils
 import { iconsPaths } from "../../utils/icons";
 import BackBtn from "./back-btn";
-import { useNavigate } from "react-router-dom";
+import { Array, searchFile } from "../../utils/utils";
+import { ChangeEvent } from "react";
 
 type Props = {
 	newFolder: Function;
+	currentFolder: Array[] | null | false;
 };
 
-const MenuBar = ({ newFolder }: Props) => {
-	const navigation = useNavigate();
-	const hadleBack = () => {
-		navigation("/dashboard");
-	};
-
+const MenuBar = ({ newFolder, currentFolder }: Props) => {
 	const hadleNewFolder = () => {
 		newFolder(true);
 	};
+
+	const hadleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+		let textInput = event.target.value;
+		searchFile(currentFolder || [], textInput);
+	};
+
 	return (
 		<nav className="nav-menu-files">
 			<div className="menu-bar">
@@ -29,6 +32,7 @@ const MenuBar = ({ newFolder }: Props) => {
 						id="search"
 						placeholder="Search File"
 						className="search-input"
+						onChange={hadleSearch}
 					/>
 					{/* <span className="span-icon-form menu-bar-search-icon">
 						<Icon width={17} height={17} paths={iconsPaths.search} />
@@ -48,7 +52,7 @@ const MenuBar = ({ newFolder }: Props) => {
 							</span>
 						</button>
 					</div>
-					<BackBtn action={hadleBack}></BackBtn>
+					<BackBtn></BackBtn>
 				</div>
 			</div>
 		</nav>
