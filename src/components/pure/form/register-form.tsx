@@ -1,12 +1,9 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import { BuilderUser } from "../../../models/builder-user";
-
 import {
-	signUp,
-	singUpGoogle,
 	auth,
+	signUp,
 	signUpUserPassword,
 } from "../../../firebase/firebase-utils";
 import { createUser } from "../../../firebase/firebase-realdatabase";
@@ -15,10 +12,13 @@ import "../../../styles/style-login.css";
 import { useNavigate } from "react-router-dom";
 
 const registerSchema = Yup.object().shape({
-	username: Yup.string()
-		.min(6, "Username too short")
-		.max(20, "Username too long")
-		.required("Username is required"),
+	// username: Yup.string()
+	// 	.min(6, "Username too short")
+	// 	.max(20, "Username too long")
+	// 	.required("Username is required"),
+	email: Yup.string()
+		.email("Invalid email format")
+		.required("Email is required"),
 	password: Yup.string()
 		.min(8, "Password too short")
 		.required("Password is required"),
@@ -33,7 +33,8 @@ const registerSchema = Yup.object().shape({
 const Register = () => {
 	const navigation = useNavigate();
 	const initialValues = {
-		username: "",
+		// username: "",
+		email: "",
 		password: "",
 		confirm: "", // to confirm password
 	};
@@ -46,10 +47,10 @@ const Register = () => {
 				// ** onSubmit Event
 				onSubmit={async (values: any) => {
 					try {
-						await signUpUserPassword(values.username, values.password);
+						await signUp(values.email, values.password);
 						let uid = auth.currentUser?.uid;
 						if (!uid) throw Error("No se puedo crear el usuario");
-						await createUser(uid, values.username);
+						await createUser(uid, values.email);
 						navigation("/dashboard");
 					} catch (error: any) {
 						alert(`Create User: ${error.code}`);
@@ -65,7 +66,7 @@ const Register = () => {
 					handleBlur,
 				}) => (
 					<Form>
-						<div className="container-input-label">
+						{/* <div className="container-input-label">
 							<label htmlFor="username">UserName</label>
 							<div className="container-input-icon container-user">
 								<Field
@@ -78,7 +79,24 @@ const Register = () => {
 						</div>
 						{errors.username && touched.username && (
 							<ErrorMessage name="username" component="div"></ErrorMessage>
+						)} */}
+						<div className="container-input-label">
+							<label htmlFor="email">Email</label>
+							<div className="container-input-icon container-email">
+								<Field
+									id="email"
+									type="email"
+									name="email"
+									placeholder="example@email.com"
+								/>
+							</div>
+						</div>
+
+						{/* Email Errors */}
+						{errors.email && touched.email && (
+							<ErrorMessage name="email" component="div"></ErrorMessage>
 						)}
+
 						<div className="container-input-label">
 							<label htmlFor="password">Password</label>
 							<div className="container-input-icon container-password">
@@ -111,9 +129,6 @@ const Register = () => {
 						)}
 
 						<button type="submit">Register Account</button>
-						<button type="button" onClick={singUpGoogle}>
-							Google
-						</button>
 						{isSubmitting ? <p>Sending your credentials...</p> : null}
 					</Form>
 				)}

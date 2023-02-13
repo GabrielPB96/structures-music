@@ -13,15 +13,13 @@ import {
 import {
 	getFirestore,
 	collection,
-	addDoc,
 	setDoc,
 	doc,
 	getDoc,
-	updateDoc,
 	query,
 	getDocs,
 } from "firebase/firestore";
-import { getEmailNormalize, normalizeUserName } from "../utils/utils";
+import { getEmailNormalize} from "../utils/utils";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyA4rRcYWm6OG7uoZVX6LB6Y8LKmr3Yo6S4",
@@ -71,16 +69,8 @@ export const signUpUserPassword = async (
 	});
 };
 
-export const signUp = async (
-	username: string,
-	email: string,
-	password: string
-) => {
-	await createUserWithEmailAndPassword(auth, email, password);
-	let user: any = auth.currentUser;
-	await updateProfile(user, {
-		displayName: username,
-	});
+export const signUp = async (email: string, password: string) => {
+	return createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const signIn = async (email: string, password: string) => {

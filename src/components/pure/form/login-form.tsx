@@ -1,7 +1,7 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import { signIn, auth, singUpGoogle } from "../../../firebase/firebase-utils";
+import { signIn } from "../../../firebase/firebase-utils";
 
 import "../../../styles/style-login.css";
 
@@ -81,9 +81,6 @@ const Login = () => {
 							<ErrorMessage name="password" component="div"></ErrorMessage>
 						)}
 						<button type="submit">Login</button>
-						<button type="button" onClick={singUpGoogle}>
-							Google
-						</button>
 						{isSubmitting ? <p>Login your credentials...</p> : null}
 					</Form>
 				)}
