@@ -17,8 +17,11 @@
 	position: relative;
 	/*Box Model*/
 	width: 80%;
-	display: flex;
-	justify-content: space-around;
+	display: grid;
+	grid-template-columns: 45% 45%;
+	justify-content: center;
+	align-items: center;
+	gap: 5%;
 	/*Texto*/
 	/*Visuales*/
 	/*otros*/
@@ -41,8 +44,16 @@
 	justify-content: center;
 }
 
-.menu-bat-options-files {
-	display: flex;
+.menu-bar-options-files {
+	position: absolute;
+	left: 2px;
+	top: 2.7rem;
+	z-index: 999;
+
+	display: none;
+	padding: 0.5rem;
+
+	background-color: #374045;
 }
 
 .search-input::placeholder {
@@ -51,6 +62,49 @@
 	background-position: 0.5rem center;
 }
 
+.btn-menu {
+	display: block;
+
+	font-size: 1rem;
+	font-family: inherit;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2);
+	background-color: white;
+
+	color: var(--primary-color);
+	font-weight: 500;
+	cursor: pointer;
+	padding: 0.5em;
+}
+
+#menu {
+	display: none;
+}
+
+#menu:checked + .menu-bar-options-files {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
 /*
   AGREGAR MEDIA QUERIES OJOOOOOOOOOOOOOOOOO
 */
+@media (min-width: 470px) {
+	.btn-menu {
+		display: none;
+	}
+
+	.menu-bar-options-files,
+	#menu:checked + .menu-bar-options-files {
+		position: relative;
+		top: 0;
+		left: 0;
+
+		padding: 0;
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+	}
+}

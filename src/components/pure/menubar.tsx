@@ -40,7 +40,11 @@ const MenuBar = ({ newFolder, currentFolder }: Props) => {
 				</div>
 
 				<div className="menu-bar-options">
-					<div className="menu-bat-options-files">
+					<label htmlFor="menu" className="btn-menu">
+						File
+					</label>
+					<input type="checkbox" name="" id="menu" />
+					<div className="menu-bar-options-files">
 						<button>
 							<span>
 								<Icon width={17} height={17} paths={iconsPaths.newFile} />
