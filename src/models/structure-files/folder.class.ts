@@ -1,8 +1,10 @@
 import { TypeArchive } from "../type-archive.enum";
 import { Content } from "./content.interface";
-
+type TypeChildren = {
+	[key: string]: Content;
+};
 export class Folder extends Content {
-	private _children: { [key: string]: Content };
+	_children: TypeChildren;
 	constructor(name: string, path: string, creationDate?: string) {
 		super(name, TypeArchive.FOLDER, path, creationDate);
 		this._children = {};

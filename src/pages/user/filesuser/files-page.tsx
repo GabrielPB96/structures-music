@@ -23,8 +23,9 @@ import {
 	objectToArray,
 	arrayComponentList,
 	createFolderWithPath,
-	Array,
 	lastFileFromUrl,
+	StateReadFile,
+	StateRead,
 } from "../../../utils/utils";
 import ConfirmModal from "../../../components/pure/confirm-modal";
 
@@ -35,7 +36,10 @@ const FilesPage = () => {
 	 * null -> se esta cargando el directorio
 	 * false -> no existe directory
 	 */
-	const [directory, setDirectory] = useState<Array[] | null | false>(null);
+	const [directory, setDirectory] = useState<StateRead>({
+		state: StateReadFile.LOADING,
+		content: null,
+	});
 	const [modalCreate, setModalCreate] = useState<boolean>(false);
 	const [modalConfirmRemove, setModalConfirmRemove] = useState<boolean>(false);
 	const [currentPath, setCurrentPath] = useState<string>("");
@@ -45,8 +49,24 @@ const FilesPage = () => {
 			try {
 				const data = snapshot.val();
 				let list = data._children && objectToArray(data._children);
-				if (list) setDirectory(list);
-				else setDirectory(false);
+				if (list)
+					setDirectory({
+						state: StateReadFile.FOLDER,
+						content: list,
+					});
+				else {
+					if (data._type === "file") {
+						setDirectory({
+							state: StateReadFile.FILE,
+							content: data,
+						});
+					} else {
+						setDirectory({
+							state: StateReadFile.EMPTY,
+							content: null,
+						});
+					}
+				}
 			} catch (error) {
 				console.log("error : Read folder");
 			}
@@ -85,18 +105,17 @@ const FilesPage = () => {
 				<h1>{lastFileFromUrl(pathFile)}</h1>
 			</header>
 
-			<MenuBar
-				newFolder={setModalCreate}
-				currentFolder={directory}
-			/>
+			<MenuBar newFolder={setModalCreate} currentFolder={directory.content} />
 
 			<main className="main-app main-files-user">
-				{directory ? (
-					arrayComponentList(directory, hadleRemove)
-				) : directory === false ? (
-					<p>Empty</p>
-				) : (
+				{directory.state === StateReadFile.LOADING ? (
 					<Loading />
+				) : directory.state === StateReadFile.FOLDER ? (
+					arrayComponentList(directory.content || [], hadleRemove)
+				) : directory.state === StateReadFile.FILE ? (
+					<p>File</p>
+				) : (
+					<p>Empty</p>
 				)}
 			</main>
 			{modalCreate && (

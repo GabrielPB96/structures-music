@@ -4,21 +4,32 @@ import { Folder } from "../models/structure-files/folder.class";
 import { db } from "../firebase/firebase-realdatabase";
 import { File } from "../models/structure-files/file.class";
 import { TypeArchive } from "../models/type-archive.enum";
+import { Content } from "../models/structure-files/content.interface";
 
-interface TypeDirectory {
-	[key: string]: any;
+export enum StateReadFile {
+	LOADING,
+	EMPTY,
+	FILE,
+	FOLDER,
 }
-export const objectToArray = (directory: TypeDirectory): Array[] | null => {
-	let list: Array[] = [];
-	for (let ob in directory) {
-		list.push(directory[ob]);
-	}
+export type StateRead = {
+	state: StateReadFile;
+	content: null | TypeChildren[];
+};
 
-	return list.length ? sortListFiles(list) : null;
+interface TypeChildren {
+	[key: string]: Content;
+}
+
+export const objectToArray = (directory: TypeChildren): Content[] => {
+	let list: Content[] = [];
+	list = Object.values(directory);
+
+	return list.length ? sortListFiles(list) : list;
 };
 
 export const arrayComponentList = (
-	directory: TypeDirectory[],
+	directory: TypeChildren[],
 	actionRemove: Function
 ) => {
 	let res: any[] = [];
@@ -52,15 +63,8 @@ export const createFolderWithPath = async (
 	);
 };
 
-export type Array = {
-	_creationDate: string;
-	_name: string;
-	_path: string;
-	_type: string;
-	_children: { [key: string]: any };
-};
-export const sortListFiles = (array: Array[]): Array[] => {
-	let res: Array[] = [];
+export const sortListFiles = (array: Content[]): Content[] => {
+	let res: Content[] = [];
 	for (let o of array) {
 		if (o._type === "file") {
 			res.unshift(o);
@@ -113,13 +117,7 @@ export const removeLastFileFromPath = (path: string) => {
 	return pathArray.join("/");
 };
 
-type ObjectFolder = {
-	_name: string;
-	_path: string;
-	_children: { [key: string]: any };
-	_type: string;
-};
-const objetoFolderToFolder = (ob: ObjectFolder) => {
+const objetoFolderToFolder = (ob: Folder) => {
 	let fold = new Folder(ob._name, ob._path);
 	if (ob._children) {
 		for (let childKey in ob._children) {
@@ -127,23 +125,25 @@ const objetoFolderToFolder = (ob: ObjectFolder) => {
 			if (child._type === TypeArchive.FILE) {
 				fold.add(new File(child.name, child.path));
 			} else {
-				let childFold = objetoFolderToFolder(child);
-				fold.add(childFold);
+				if (child instanceof Folder) {
+					let childFold = objetoFolderToFolder(child);
+					fold.add(childFold);
+				}
 			}
 		}
 	}
 	return fold;
 };
 
-export const searchFile = (fold: Array[], nameFile: string): Array[] => {
-	let filesMacht: Array[] = [];
-	let file: Array;
+export const searchFile = (fold: Content[], nameFile: string): Content[] => {
+	let filesMacht: Content[] = [];
+	let file: Content;
 	for (file of fold) {
 		if (file._name.toLowerCase().startsWith(nameFile.toLowerCase())) {
 			filesMacht.push(file);
 		}
-		if (file._children) {
-			let newFold: Array[] | null = objectToArray(file._children);
+		if (file instanceof Folder && file._children) {
+			let newFold: Content[] = objectToArray(file._children);
 			if (newFold) filesMacht.push(...searchFile(newFold, nameFile));
 		}
 	}
