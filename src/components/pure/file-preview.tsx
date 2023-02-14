@@ -54,7 +54,7 @@ const FilePreview = ({
 				</article>
 			</Link>
 			<div className="component-list-options">
-				<button onClick={remove}>
+				<button className="button" onClick={remove}>
 					<Icon
 						width={16}
 						height={16}
@@ -62,7 +62,7 @@ const FilePreview = ({
 						color="tomato"
 					/>
 				</button>
-				<button>
+				<button className="button">
 					<Icon width={16} height={16} paths={iconsPaths.pencilFill} />
 				</button>
 			</div>

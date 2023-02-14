@@ -35,7 +35,7 @@ body *::-webkit-scrollbar {
 }
 
 input,
-button {
+.button {
 	font-size: 1rem;
 	font-family: inherit;
 	border: none;
@@ -43,14 +43,14 @@ button {
 	box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2);
 	background-color: white;
 }
-button {
+.button {
 	color: var(--primary-color);
 	font-weight: 500;
 	cursor: pointer;
 	padding: 0.5em;
 }
 input:hover,
-button:hover {
+.button:hover {
 	box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.6), 0 1px 2px hsla(0, 0%, 0%, 0.2);
 }
 

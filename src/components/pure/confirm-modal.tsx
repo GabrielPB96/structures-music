@@ -49,10 +49,10 @@ const Confirm = ({ message, accept, cancel }: Props) => {
 			<section style={styleContainer}>
 				<p style={styleMessage}>{message}</p>
 				<div className="container-options" style={styleOptions}>
-					<button type="button" onClick={() => accept()}>
+					<button className="button" type="button" onClick={() => accept()}>
 						Accept
 					</button>
-					<button type="button" onClick={() => cancel()}>
+					<button className="button" type="button" onClick={() => cancel()}>
 						Cancel
 					</button>
 				</div>

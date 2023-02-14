@@ -63,7 +63,11 @@
 }
 
 .btn-menu {
-	display: block;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 37px;
+	margin-bottom: 0;
 
 	font-size: 1rem;
 	font-family: inherit;
@@ -75,7 +79,6 @@
 	color: var(--primary-color);
 	font-weight: 500;
 	cursor: pointer;
-	padding: 0.5em;
 }
 
 #menu {

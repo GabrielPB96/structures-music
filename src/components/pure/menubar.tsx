@@ -5,12 +5,13 @@ import "../../styles/style-menu-bar.css";
 //utils
 import { iconsPaths } from "../../utils/icons";
 import BackBtn from "./back-btn";
-import { Array, searchFile } from "../../utils/utils";
+import { searchFile } from "../../utils/utils";
 import { ChangeEvent } from "react";
 
 type Props = {
 	newFolder: Function;
-	currentFolder: Array[] | null | false;
+	//TODO: REVISAR EL TIPO
+	currentFolder: any;
 };
 
 const MenuBar = ({ newFolder, currentFolder }: Props) => {
@@ -45,12 +46,12 @@ const MenuBar = ({ newFolder, currentFolder }: Props) => {
 					</label>
 					<input type="checkbox" name="" id="menu" />
 					<div className="menu-bar-options-files">
-						<button>
+						<button className="button">
 							<span>
 								<Icon width={17} height={17} paths={iconsPaths.newFile} />
 							</span>
 						</button>
-						<button onClick={hadleNewFolder}>
+						<button className="button" onClick={hadleNewFolder}>
 							<span>
 								<Icon width={17} height={17} paths={iconsPaths.newFolder} />
 							</span>

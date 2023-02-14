@@ -77,8 +77,10 @@ const EditProfile = () => {
 								)}
 							</div>
 							<div className="container-buttons">
-								<button type="submit">Save</button>
-								<button type="button" onClick={cancel}>
+								<button className="button" type="submit">
+									Save
+								</button>
+								<button className="button" type="button" onClick={cancel}>
 									Cancel
 								</button>
 							</div>

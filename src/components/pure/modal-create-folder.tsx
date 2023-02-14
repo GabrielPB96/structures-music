@@ -56,8 +56,8 @@ const CreateFolder = ({ cancel, action }: Props) => {
 							{errors.name && touched.name && (
 								<ErrorMessage name="name" component="div"></ErrorMessage>
 							)}
-							<button type="submit">Create Folder</button>
-							<button type="button" onClick={hadleCancel}>
+							<button className="button" type="submit">Create Folder</button>
+							<button className="button" type="button" onClick={hadleCancel}>
 								Cancel
 							</button>
 							{isSubmitting ? <p>Creating...</p> : null}

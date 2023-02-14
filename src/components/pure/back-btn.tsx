@@ -14,7 +14,7 @@ const BackBtn = ({ action }: Props) => {
 		setPathFile(removeLastFileFromPath(pathFile));
 	};
 	return (
-		<button onClick={action || back}>
+		<button className="button" onClick={action || back}>
 			<span>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

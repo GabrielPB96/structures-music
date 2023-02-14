@@ -128,7 +128,7 @@ const Register = () => {
 							<ErrorMessage name="confirm" component="div"></ErrorMessage>
 						)}
 
-						<button type="submit">Register Account</button>
+						<button className="button" type="submit">Register Account</button>
 						{isSubmitting ? <p>Sending your credentials...</p> : null}
 					</Form>
 				)}

@@ -136,14 +136,14 @@ const MetronomeComponent = ({ compassInit, customMetronome }: Props) => {
       <PointContainer points={state.points} action={clickPoint} />
       <div className="metronomo-container-buttons-bpm">
         <button
-          className="btn-mas1"
+          className="metronome-button btn-mas1"
           onClick={() => changeBpm(1, "incrementar")}
         >
           +1
         </button>
         <RangeBpm value={bpm} setBpm={changeBpm} />
         <button
-          className="btn-menos1"
+          className="metronome-button btn-menos1"
           onClick={() => changeBpm(1, "decrementar")}
         >
           -1
