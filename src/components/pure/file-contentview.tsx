@@ -1,48 +1,46 @@
+import { File } from "../../models/structure-files/file.class";
 import Metronome from "../metronome/components/container/metronome";
 import { arrayStatesToArrayPoints } from "../metronome/utils/utils";
-type PropsDetail = {
-  _name: string;
-  _creationDate: string;
-  _type: string;
-  _music: {
-    _title: string;
-    _autor?: string;
-    _album?: string;
-    _metronome: {
-      bpm: number;
-      compass: number;
-      statePoints: [];
-    };
-    _estructure: string;
-  };
-};
+
+//styles
+import "../../styles/style-files.css";
+import BackBtn from "./back-btn";
+
+/**
+ * TODO: HACER LOS CAMPOS EDITABLES
+ * TODO: AGREGAR BOTON PARA GUARDAR CAMBIOS
+ * TODO: AGREGAR EDITOR DE TEXTO 
+ */
+
 type Props = {
-  props: PropsDetail;
+	props: File;
 };
 const FileContentView = ({ props }: Props) => {
-  return (
-    <div>
-      <section>
-        <header>
-          <h1>{props._music._title}</h1>
-          <p>Fecha: {props._creationDate}</p>
-          <p>Autor: {props._music._autor}</p>
-        </header>
-        <div>
-          <Metronome
-            compassInit={props._music._metronome.compass}
-            customMetronome={{
-              bpm: props._music._metronome.bpm,
-              compass: props._music._metronome.compass,
-              statePoinst: arrayStatesToArrayPoints(
-                props._music._metronome.statePoints
-              )
-            }}
-          />
-        </div>
-      </section>
-    </div>
-  );
+	console.log(props._music);
+	return (
+    <div className="page" style={{
+      gridTemplateRows:"20% 1fr"
+    }}>
+			<header className="header-app header-files">
+				<h1>{props._music._title}</h1>
+				<p>Fecha: {props._creationDate}</p>
+        <p>Autor: {props._music._autor}</p>
+        <BackBtn />
+			</header>
+			<main className="main-app main-files-user">
+				<Metronome
+					compassInit={props._music._metronome.compass}
+					customMetronome={{
+						bpm: props._music._metronome.bpm,
+						compass: props._music._metronome.compass,
+						statePoinst: arrayStatesToArrayPoints(
+							props._music._metronome.statePoints
+						),
+					}}
+				/>
+			</main>
+		</div>
+	);
 };
 
 export default FileContentView;

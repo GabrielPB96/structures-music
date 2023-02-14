@@ -28,6 +28,15 @@ import {
 	StateRead,
 } from "../../../utils/utils";
 import ConfirmModal from "../../../components/pure/confirm-modal";
+import FileContentView from "../../../components/pure/file-contentview";
+
+const Header = ({ title }: { title: string }) => {
+	return (
+		<header className="header-app header-files">
+			<h1>{title}</h1>
+		</header>
+	);
+};
 
 const FilesPage = () => {
 	const { user, pathFile } = useContext(AuthContext);
@@ -56,6 +65,7 @@ const FilesPage = () => {
 					});
 				else {
 					if (data._type === "file") {
+						console.log(data);
 						setDirectory({
 							state: StateReadFile.FILE,
 							content: data,
@@ -100,24 +110,30 @@ const FilesPage = () => {
 	};
 
 	return (
-		<div className="page">
-			<header className="header-app header-files">
-				<h1>{lastFileFromUrl(pathFile)}</h1>
-			</header>
+		<>
+			{directory.state !== StateReadFile.FILE ? (
+				<div className="page">
+					<Header title={lastFileFromUrl(pathFile) || ""} />
 
-			<MenuBar newFolder={setModalCreate} currentFolder={directory.content} />
+					<MenuBar
+						newFolder={setModalCreate}
+						currentFolder={directory.content}
+					/>
+					<main className="main-app main-files-user">
+						{directory.state === StateReadFile.LOADING ? (
+							<Loading />
+						) : directory.state === StateReadFile.FOLDER ? (
+							arrayComponentList(directory.content || [], hadleRemove)
+						) : (
+							<p>Empty</p>
+						)}
+					</main>
+				</div>
+			) : (
+				//TODO: REVISAR EL TIPADO :(
+				<FileContentView props={directory.content} />
+			)}
 
-			<main className="main-app main-files-user">
-				{directory.state === StateReadFile.LOADING ? (
-					<Loading />
-				) : directory.state === StateReadFile.FOLDER ? (
-					arrayComponentList(directory.content || [], hadleRemove)
-				) : directory.state === StateReadFile.FILE ? (
-					<p>File</p>
-				) : (
-					<p>Empty</p>
-				)}
-			</main>
 			{modalCreate && (
 				<CreateFolder action={createFolder} cancel={setModalCreate} />
 			)}
@@ -128,7 +144,7 @@ const FilesPage = () => {
 					cancel={() => setModalConfirmRemove(false)}
 				/>
 			)}
-		</div>
+		</>
 	);
 };
 
