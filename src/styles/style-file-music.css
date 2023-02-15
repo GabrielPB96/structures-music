@@ -36,6 +36,7 @@
 	grid-row: 1 / 2;
 	grid-column: 1 / 2;
 	justify-content: start;
+	z-index: 999;
 }
 
 .container-title .save-button {
@@ -47,9 +48,6 @@
 .page-file-music-info {
 	width: 100%;
 	display: grid;
-	grid-template-areas:
-		"date date"
-		"autor album";
 	gap: 5px;
 }
 
@@ -57,18 +55,10 @@
 .page-file-music-autor,
 .page-file-music-album {
 	width: 100%;
+	display: grid;
+	grid-template-columns: auto 1fr;
 	padding-left: 1rem;
-}
-
-.page-file-music-date {
-	grid-area: date;
-}
-
-.page-file-music-autor {
-	grid-area: autor;
-}
-.page-file-music-album {
-	grid-area: album;
+	gap: 10px;
 }
 
 .page-file-music-main {
@@ -92,4 +82,53 @@
 	outline: none;
 	border: none;
 	border-radius: 5px;
+}
+
+.input-autor,
+.input-album,
+.input-title {
+	width: auto;
+	min-width: auto;
+
+	padding: 0;
+	text-align: left;
+	color: #eee;
+
+	background-color: transparent;
+}
+
+.input-title {
+	width: 100%;
+
+	font-size: 2rem;
+	text-align: center;
+}
+
+.input-autor:focus,
+.input-album:focus,
+.input-title:focus {
+	outline: none;
+	padding: 0;
+}
+
+.input-title:focus {
+	text-align: center;
+}
+
+.input-autor:hover,
+.input-album:hover,
+.input-title:hover {
+	box-shadow: none;
+}
+
+.label-info {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	justify-content: start;
+	align-items: center;
+}
+
+.label-info span {
+	display: block;
 }

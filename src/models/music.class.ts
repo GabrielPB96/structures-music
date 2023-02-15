@@ -5,7 +5,7 @@ export class Music {
 	_autor?: string;
 	_album?: string;
 	_metronome: ConfigMetronome;
-	_estructure: string;
+	_structure: string;
 
 	constructor(
 		title: string,
@@ -17,7 +17,7 @@ export class Music {
 		this._autor = autor || "unknown";
 		this._album = album || "unknown";
 		this._metronome = metronome;
-		this._estructure = "...";
+		this._structure = "...";
 	}
 	public get title() {
 		return this._title;

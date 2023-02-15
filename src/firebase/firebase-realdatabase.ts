@@ -32,6 +32,10 @@ export async function s(ob: any, idUser: string) {
 	return set(ref(db, `${PATH_USERS}${idUser}`), ob);
 }
 
+export const updateDataPath = async (path: string, data: any) => {
+	return set(ref(db, path), data);
+};
+
 export async function createUser(uid: string, email: string) {
 	const newRef = ref(db, `${PATH_USERS}${uid}`);
 	let default_file: File = new File(
