@@ -9,7 +9,11 @@ import { searchFile } from "../../utils/utils";
 import { ChangeEvent, useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 import { off, onValue, ref } from "firebase/database";
-import { db, updateDataPath } from "../../firebase/firebase-realdatabase";
+import {
+	db,
+	readGetOnce,
+	updateDataPath,
+} from "../../firebase/firebase-realdatabase";
 import { File } from "../../models/structure-files/file.class";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -28,25 +32,18 @@ const MenuBar = ({ newFolder, currentFolder }: Props) => {
 	};
 
 	const hadleNewFile = async () => {
-		const dataRef = ref(db, pathFile);
-		//TODO : eliminar el oyente
-		const callBackNewFile = async (snapshot: any) => {
-			const data = snapshot.val();
-			const newFile = new File("New File", `${pathFile}/_children/New File`);
-			const newData = {
-				...data,
-				["_children"]: {
-					...data._children,
-					["New File"]: newFile,
-				},
-			};
-			await updateDataPath(pathFile, newData);
-			navigation(`/musics/New File`);
-			setPathFile(`${pathFile}/_children/New File`);
+		const dataUser = await readGetOnce(pathFile);
+		const newFile = new File("New File", `${pathFile}/_children/New File`);
+		const newData = {
+			...dataUser,
+			["_children"]: {
+				...dataUser._children,
+				["New File"]: newFile,
+			},
 		};
-		Promise.resolve(onValue(dataRef, callBackNewFile)).then(() => {
-			off(dataRef, "value", callBackNewFile);
-		});
+		await updateDataPath(pathFile, newData);
+		navigation(`/musics/New File`);
+		setPathFile(`${pathFile}/_children/New File`);
 	};
 
 	const hadleSearch = (event: ChangeEvent<HTMLInputElement>) => {

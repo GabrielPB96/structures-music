@@ -8,6 +8,7 @@ import "../../../styles/style-files.css";
 //import { readDoc, readExactProperty } from "../../../firebase/firebase-utils";
 import {
 	db,
+	readGetOnce,
 	removeFileWithPath,
 } from "../../../firebase/firebase-realdatabase";
 //react
@@ -29,6 +30,7 @@ import {
 } from "../../../utils/utils";
 import ConfirmModal from "../../../components/pure/confirm-modal";
 import FileContentView from "../../../components/pure/file-contentview";
+import { useReadFileUser } from "../../../hooks/useReadFileUser";
 
 const Header = ({ title }: { title: string }) => {
 	return (
@@ -39,55 +41,12 @@ const Header = ({ title }: { title: string }) => {
 };
 
 const FilesPage = () => {
-	const { user, pathFile } = useContext(AuthContext);
-	/**
-	 * [] -> tipo de dato requerido
-	 * null -> se esta cargando el directorio
-	 * false -> no existe directory
-	 */
-	const [directory, setDirectory] = useState<StateRead>({
-		state: StateReadFile.LOADING,
-		content: null,
-	});
+	const { pathFile } = useContext(AuthContext);
+	const { directory } = useReadFileUser();
+
 	const [modalCreate, setModalCreate] = useState<boolean>(false);
 	const [modalConfirmRemove, setModalConfirmRemove] = useState<boolean>(false);
 	const [currentPath, setCurrentPath] = useState<string>("");
-
-	useEffect(() => {
-		const callBackOnValue = (snapshot: any) => {
-			try {
-				const data = snapshot.val();
-				let list = data._children && objectToArray(data._children);
-				if (list)
-					setDirectory({
-						state: StateReadFile.FOLDER,
-						content: list,
-					});
-				else {
-					if (data._type === "file") {
-						setDirectory({
-							state: StateReadFile.FILE,
-							content: data,
-						});
-					} else {
-						setDirectory({
-							state: StateReadFile.EMPTY,
-							content: null,
-						});
-					}
-				}
-			} catch (error) {
-				console.log("error : Read folder");
-			}
-		};
-		const refDirectory = ref(db, pathFile);
-		if (user) {
-			onValue(refDirectory, callBackOnValue);
-		}
-		return () => {
-			off(refDirectory, "value", callBackOnValue);
-		};
-	}, [pathFile]);
 
 	const createFolder = async (nameFolder: string) => {
 		try {

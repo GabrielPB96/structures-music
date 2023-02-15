@@ -9,15 +9,13 @@ import BackBtn from "./back-btn";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import SaveBtn from "./save-btn";
-import { db, updateDataPath } from "../../firebase/firebase-realdatabase";
-import { off, onValue, ref } from "firebase/database";
+import {
+	db,
+	readGetOnce,
+	removeFileWithPath,
+	updateDataPath,
+} from "../../firebase/firebase-realdatabase";
 import Loading from "./loading";
-
-/**
- * TODO: HACER LOS CAMPOS EDITABLES
- * TODO: AGREGAR BOTON PARA GUARDAR CAMBIOS
- * TODO: AGREGAR EDITOR DE TEXTO
- */
 
 type Props = {
 	props: File;
@@ -36,27 +34,45 @@ const FileContentView = ({ props }: Props) => {
 
 	const saveInfo = async () => {
 		setGuardando(true);
-		const dataRef = ref(db, pathFile);
-		const callBackSaveInfo = async (snapshot: any) => {
-			const data = snapshot.val();
-			let newData = {
-				...data,
-				["_name"]: `${title}`,
-				["_music"]: {
-					...data._music,
-					["_title"]: `${title}`,
-					["_album"]: `${album}`,
-					["_autor"]: `${autor}`,
-					["_structure"]: `${estructura}`,
-				},
-			};
-			//TODO: cambiar el path global OJO
-			await updateDataPath(pathFile, newData);
-			setGuardando(false);
+		const data = await readGetOnce(pathFile);
+
+		let father = pathFile.split("/");
+		father = father.slice(0, father.length - 1);
+		const pathFather = father.join("/");
+
+		let newData = {
+			...data,
+			["_name"]: `${title}`,
+			["_music"]: {
+				...data._music,
+				["_title"]: `${title}`,
+				["_album"]: `${album}`,
+				["_autor"]: `${autor}`,
+				["_structure"]: `${estructura}`,
+			},
+			["_path"]: `${pathFather}/${title}`,
 		};
-		Promise.resolve(onValue(dataRef, callBackSaveInfo)).then(() => {
-			off(dataRef, "value", callBackSaveInfo);
-		});
+
+		if (
+			data._name !== title ||
+			data._music._autor !== autor ||
+			data._music._album !== album ||
+			data._music._structure !== estructura
+		) {
+			await updateDataPath(pathFile, newData);
+		}
+
+		//TODO: REVISAR EL onValue :(
+		if (data._name !== title) {
+			const dataFather = await readGetOnce(pathFather);
+			await updateDataPath(pathFather, {
+				...dataFather,
+				[`${title}`]: newData,
+			});
+			await removeFileWithPath(pathFile);
+		}
+
+		setGuardando(false);
 	};
 
 	return (

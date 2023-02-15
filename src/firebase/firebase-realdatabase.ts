@@ -1,6 +1,14 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, onValue, remove } from "firebase/database";
+import {
+	getDatabase,
+	ref,
+	set,
+	onValue,
+	remove,
+	get,
+	child,
+} from "firebase/database";
 import { File } from "../models/structure-files/file.class";
 
 import { Folder } from "../models/structure-files/folder.class";
@@ -64,16 +72,6 @@ async function readUser(idUser: string) {
 	});
 }
 
-async function onReadDataUserWithPath(path: string) {
-	return new Promise((s, r) => {
-		const dataRef = ref(db, `${PATH_USERS}/${path}`);
-		onValue(dataRef, (snapshot) => {
-			const data = snapshot.val();
-			s(data);
-		});
-	});
-}
-
 export async function addFile(file: any, path: string) {
 	const pR = ref(db, `${PATH_USERS}/${path}`);
 	return set(pR, file);
@@ -82,3 +80,9 @@ export async function addFile(file: any, path: string) {
 export async function removeFileWithPath(path: string) {
 	return remove(ref(db, path));
 }
+
+export const readGetOnce = async (path: string) => {
+	const refDB = ref(db);
+	const snapshot = await get(child(refDB, path));
+	return snapshot.val();
+};
