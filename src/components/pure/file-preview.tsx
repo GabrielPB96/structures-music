@@ -62,9 +62,9 @@ const FilePreview = ({
 						color="tomato"
 					/>
 				</button>
-				<button className="button">
+				{/* <button className="button">
 					<Icon width={16} height={16} paths={iconsPaths.pencilFill} />
-				</button>
+				</button> */}
 			</div>
 		</div>
 	);

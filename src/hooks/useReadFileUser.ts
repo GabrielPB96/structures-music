@@ -8,7 +8,7 @@ export function useReadFileUser() {
 	const { pathFile } = useContext(AuthContext);
 	const [directory, setDirectory] = useState<StateRead>({
 		state: StateReadFile.LOADING,
-		content: null,
+		content: [],
 	});
 
 	useEffect(() => {
@@ -25,7 +25,7 @@ export function useReadFileUser() {
 				} else {
 					setDirectory({
 						state: StateReadFile.EMPTY,
-						content: null,
+						content: [],
 					});
 				}
 			} catch (error) {

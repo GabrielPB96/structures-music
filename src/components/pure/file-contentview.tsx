@@ -6,19 +6,19 @@ import { arrayStatesToArrayPoints } from "../metronome/utils/utils";
 import "../../styles/style-files.css";
 import "../../styles/style-file-music.css";
 import BackBtn from "./back-btn";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import SaveBtn from "./save-btn";
 import {
-	db,
 	readGetOnce,
 	removeFileWithPath,
 	updateDataPath,
 } from "../../firebase/firebase-realdatabase";
 import Loading from "./loading";
+import MetronomeContext from "../../context/MetronomeContext";
 
 type Props = {
-	props: File;
+	props: File | any;
 };
 const FileContentView = ({ props }: Props) => {
 	const { pathFile } = useContext(AuthContext);
@@ -28,9 +28,18 @@ const FileContentView = ({ props }: Props) => {
 	const [title, setTitle] = useState(props._name);
 	const [autor, setAutor] = useState(props._music._autor);
 	const [album, setAlbum] = useState(props._music._album);
-	const [compass, setCompass] = useState(props._music._metronome.compass);
-	const [bpm, seBpm] = useState(props._music._metronome.bpm);
 	const [estructura, setEstructura] = useState(`${props._music._structure}`);
+
+	const { stateMetronome, setStateMetronome } = useContext(MetronomeContext);
+	useEffect(() => {
+		const initState = {
+			...stateMetronome,
+			bpm: props._music._metronome.bpm,
+			compass: props._music._metronome.compass,
+			statePoints: props._music._metronome.statePoints,
+		};
+		setStateMetronome(initState);
+	}, []);
 
 	const saveInfo = async () => {
 		setGuardando(true);
@@ -49,6 +58,11 @@ const FileContentView = ({ props }: Props) => {
 				["_album"]: `${album}`,
 				["_autor"]: `${autor}`,
 				["_structure"]: `${estructura}`,
+				["_metronome"]: {
+					["bpm"]: stateMetronome.bpm,
+					["compass"]: stateMetronome.compass,
+					["statePoints"]: stateMetronome.statePoints,
+				},
 			},
 			["_path"]: `${pathFather}/${title}`,
 		};
@@ -57,7 +71,8 @@ const FileContentView = ({ props }: Props) => {
 			data._name !== title ||
 			data._music._autor !== autor ||
 			data._music._album !== album ||
-			data._music._structure !== estructura
+			data._music._structure !== estructura ||
+			data._music._metronome !== stateMetronome
 		) {
 			await updateDataPath(pathFile, newData);
 		}

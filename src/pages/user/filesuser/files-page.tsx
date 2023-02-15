@@ -6,31 +6,26 @@ import "../../../styles/style-files.css";
 
 //firebase
 //import { readDoc, readExactProperty } from "../../../firebase/firebase-utils";
-import {
-	db,
-	readGetOnce,
-	removeFileWithPath,
-} from "../../../firebase/firebase-realdatabase";
+import { removeFileWithPath } from "../../../firebase/firebase-realdatabase";
 //react
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 //react router
 import AuthContext from "../../../context/AuthContext";
-import { off, onValue, ref } from "firebase/database";
 import CreateFolder from "../../../components/pure/modal-create-folder";
 import Loading from "../../../components/pure/loading";
 
 import {
-	objectToArray,
-	arrayComponentList,
 	createFolderWithPath,
 	lastFileFromUrl,
 	StateReadFile,
-	StateRead,
 } from "../../../utils/utils";
 import ConfirmModal from "../../../components/pure/confirm-modal";
 import FileContentView from "../../../components/pure/file-contentview";
 import { useReadFileUser } from "../../../hooks/useReadFileUser";
+import ListOfFiles from "../../../components/container/list-of-files";
+import EmptyDirectory from "../../../components/pure/empty-directory";
+import { MetronomeProvider } from "../../../context/MetronomeContext";
 
 const Header = ({ title }: { title: string }) => {
 	return (
@@ -81,15 +76,19 @@ const FilesPage = () => {
 						{directory.state === StateReadFile.LOADING ? (
 							<Loading />
 						) : directory.state === StateReadFile.FOLDER ? (
-							arrayComponentList(directory.content || [], hadleRemove)
+							<ListOfFiles
+								directory={directory.content}
+								actionRemove={hadleRemove}
+							/>
 						) : (
-							<p>Empty</p>
+							<EmptyDirectory />
 						)}
 					</main>
 				</div>
 			) : (
-				//TODO: REVISAR EL TIPADO :(
-				<FileContentView props={directory.content} />
+				<MetronomeProvider>
+					<FileContentView props={directory.content} />
+				</MetronomeProvider>
 			)}
 
 			{modalCreate && (

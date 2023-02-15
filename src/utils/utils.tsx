@@ -1,5 +1,4 @@
 import { ref, set } from "firebase/database";
-import ComponentList from "../components/container/component-list";
 import { Folder } from "../models/structure-files/folder.class";
 import { db } from "../firebase/firebase-realdatabase";
 import { File } from "../models/structure-files/file.class";
@@ -14,10 +13,10 @@ export enum StateReadFile {
 }
 export type StateRead = {
 	state: StateReadFile;
-	content: null | TypeChildren[];
+	content: TypeChildren[] | File;
 };
 
-interface TypeChildren {
+export interface TypeChildren {
 	[key: string]: Content;
 }
 
@@ -26,27 +25,6 @@ export const objectToArray = (directory: TypeChildren): Content[] => {
 	list = Object.values(directory);
 
 	return list.length ? sortListFiles(list) : list;
-};
-
-export const arrayComponentList = (
-	directory: TypeChildren[],
-	actionRemove: Function
-) => {
-	let res: any[] = [];
-	if (directory) {
-		res = directory.map((e: any, k: number) => (
-			<ComponentList
-				type={e._type}
-				title={e._name}
-				textPreview={e._textPreview}
-				createDate={e._creationDate}
-				key={`clp${k}`}
-				pathFile={e._path}
-				actionRemove={actionRemove}
-			/>
-		));
-	}
-	return res;
 };
 
 export const createFolderWithPath = async (
