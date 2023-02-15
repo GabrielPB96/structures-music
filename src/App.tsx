@@ -13,7 +13,6 @@ import { useContext } from "react";
 import AuthContext from "./context/AuthContext";
 import ErrorPage from "./pages/404/error-page";
 import FilesPage from "./pages/user/filesuser/files-page";
-import FolderContentView from "./components/pure/folder-contentview";
 import EditProfile from "./components/container/edit-profile";
 
 const App = () => {
