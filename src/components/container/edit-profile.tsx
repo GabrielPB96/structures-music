@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const schema = Yup.object().shape({
 	username: Yup.string()
-		.min(10, "UserName es muy largo")
+		.min(10, "UserName es muy corto")
 		.max(20, "UserName es muy largo"),
 	email: Yup.string().email("Formato Invalido").required("Email es requerido"),
 	photoURL: Yup.string().url("Formato Invalido"),

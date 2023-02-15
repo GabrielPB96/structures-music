@@ -33,7 +33,6 @@ const registerSchema = Yup.object().shape({
 const Register = () => {
 	const navigation = useNavigate();
 	const initialValues = {
-		// username: "",
 		email: "",
 		password: "",
 		confirm: "", // to confirm password
@@ -66,20 +65,6 @@ const Register = () => {
 					handleBlur,
 				}) => (
 					<Form>
-						{/* <div className="container-input-label">
-							<label htmlFor="username">UserName</label>
-							<div className="container-input-icon container-user">
-								<Field
-									id="username"
-									type="text"
-									name="username"
-									placeholder="username"
-								/>
-							</div>
-						</div>
-						{errors.username && touched.username && (
-							<ErrorMessage name="username" component="div"></ErrorMessage>
-						)} */}
 						<div className="container-input-label">
 							<label htmlFor="email">Email</label>
 							<div className="container-input-icon container-email">
@@ -128,7 +113,9 @@ const Register = () => {
 							<ErrorMessage name="confirm" component="div"></ErrorMessage>
 						)}
 
-						<button className="button" type="submit">Register Account</button>
+						<button className="button" type="submit">
+							Register Account
+						</button>
 						{isSubmitting ? <p>Sending your credentials...</p> : null}
 					</Form>
 				)}
