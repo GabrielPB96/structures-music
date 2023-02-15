@@ -73,6 +73,9 @@
 	height: 100%;
 	padding: 1rem;
 }
+.container-structure textarea {
+	line-height: 0.8rem;
+}
 
 .textarea-structure {
 	width: 100%;

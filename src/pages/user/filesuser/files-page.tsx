@@ -65,7 +65,6 @@ const FilesPage = () => {
 					});
 				else {
 					if (data._type === "file") {
-						console.log(data);
 						setDirectory({
 							state: StateReadFile.FILE,
 							content: data,

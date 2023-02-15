@@ -10,7 +10,8 @@ import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import SaveBtn from "./save-btn";
 import { db, updateDataPath } from "../../firebase/firebase-realdatabase";
-import { onValue, ref } from "firebase/database";
+import { off, onValue, ref } from "firebase/database";
+import Loading from "./loading";
 
 /**
  * TODO: HACER LOS CAMPOS EDITABLES
@@ -24,7 +25,8 @@ type Props = {
 const FileContentView = ({ props }: Props) => {
 	const { pathFile } = useContext(AuthContext);
 
-	console.log(pathFile);
+	const [guardando, setGuardando] = useState(false);
+
 	const [title, setTitle] = useState(props._name);
 	const [autor, setAutor] = useState(props._music._autor);
 	const [album, setAlbum] = useState(props._music._album);
@@ -33,8 +35,9 @@ const FileContentView = ({ props }: Props) => {
 	const [estructura, setEstructura] = useState(`${props._music._structure}`);
 
 	const saveInfo = async () => {
+		setGuardando(true);
 		const dataRef = ref(db, pathFile);
-		onValue(dataRef, async (snapshot) => {
+		const callBackSaveInfo = async (snapshot: any) => {
 			const data = snapshot.val();
 			let newData = {
 				...data,
@@ -47,8 +50,12 @@ const FileContentView = ({ props }: Props) => {
 					["_structure"]: `${estructura}`,
 				},
 			};
+			//TODO: cambiar el path global OJO
 			await updateDataPath(pathFile, newData);
-			console.log("update");
+			setGuardando(false);
+		};
+		Promise.resolve(onValue(dataRef, callBackSaveInfo)).then(() => {
+			off(dataRef, "value", callBackSaveInfo);
 		});
 	};
 
@@ -129,13 +136,13 @@ const FileContentView = ({ props }: Props) => {
 						className="textarea-structure"
 						id="structure"
 						value={estructura}
-						defaultValue={estructura}
 						onChange={(event) => {
 							setEstructura(event.target.value);
 						}}
 					/>
 				</section>
 			</main>
+			{guardando && <Loading />}
 		</div>
 	);
 };

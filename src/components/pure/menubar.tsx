@@ -6,7 +6,12 @@ import "../../styles/style-menu-bar.css";
 import { iconsPaths } from "../../utils/icons";
 import BackBtn from "./back-btn";
 import { searchFile } from "../../utils/utils";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useContext } from "react";
+import AuthContext from "../../context/AuthContext";
+import { off, onValue, ref } from "firebase/database";
+import { db, updateDataPath } from "../../firebase/firebase-realdatabase";
+import { File } from "../../models/structure-files/file.class";
+import { Link, useNavigate } from "react-router-dom";
 
 type Props = {
 	newFolder: Function;
@@ -15,8 +20,33 @@ type Props = {
 };
 
 const MenuBar = ({ newFolder, currentFolder }: Props) => {
+	const navigation = useNavigate();
+	const { pathFile, setPathFile } = useContext(AuthContext);
+
 	const hadleNewFolder = () => {
 		newFolder(true);
+	};
+
+	const hadleNewFile = async () => {
+		const dataRef = ref(db, pathFile);
+		//TODO : eliminar el oyente
+		const callBackNewFile = async (snapshot: any) => {
+			const data = snapshot.val();
+			const newFile = new File("New File", `${pathFile}/_children/New File`);
+			const newData = {
+				...data,
+				["_children"]: {
+					...data._children,
+					["New File"]: newFile,
+				},
+			};
+			await updateDataPath(pathFile, newData);
+			navigation(`/musics/New File`);
+			setPathFile(`${pathFile}/_children/New File`);
+		};
+		Promise.resolve(onValue(dataRef, callBackNewFile)).then(() => {
+			off(dataRef, "value", callBackNewFile);
+		});
 	};
 
 	const hadleSearch = (event: ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +76,7 @@ const MenuBar = ({ newFolder, currentFolder }: Props) => {
 					</label>
 					<input type="checkbox" name="" id="menu" />
 					<div className="menu-bar-options-files">
-						<button className="button">
+						<button onClick={hadleNewFile} className="button">
 							<span>
 								<Icon width={17} height={17} paths={iconsPaths.newFile} />
 							</span>
