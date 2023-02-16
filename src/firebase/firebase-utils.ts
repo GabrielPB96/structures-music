@@ -46,12 +46,22 @@ export const getCurrentAuth = () => {
 export const stateChanged = (setUser: any, setPathFile: any) => {
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
-			setUser(user);
-			setPathFile(`users/${user.uid}/directory`);
+			const userLocalStore = localStorage.getItem("user");
+			if (!userLocalStore) {
+				setUser(user);
+				localStorage.setItem("user", JSON.stringify(user));
+			}
+			const pathLocalStorage = localStorage.getItem("pathFile");
+			if (!pathLocalStorage) {
+				localStorage.setItem("pathFile", `users/${user.uid}/directory`);
+				setPathFile(`users/${user.uid}/directory`);
+			}
 			//console.log("sing in");
 		} else {
 			setUser(null);
 			setPathFile("");
+			localStorage.removeItem("user");
+			localStorage.removeItem("pathFile");
 			//console.log("logout");
 		}
 	});

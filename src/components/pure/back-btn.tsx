@@ -1,20 +1,24 @@
-import { MouseEventHandler, useContext } from "react";
+import { MouseEventHandler, ReactNode, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import { removeLastFileFromPath } from "../../utils/utils";
 
 type Props = {
 	action?: MouseEventHandler;
+	children? : ReactNode
 };
-const BackBtn = ({ action }: Props) => {
+const BackBtn = ({ action, children }: Props) => {
 	const { setPathFile, pathFile } = useContext(AuthContext);
 	const navigation = useNavigate();
 	const back = () => {
 		navigation(-1);
-		setPathFile(removeLastFileFromPath(pathFile));
+		const newPathFile = removeLastFileFromPath(pathFile);
+		setPathFile(newPathFile);
+		localStorage.setItem("pathFile", newPathFile);
 	};
 	return (
 		<button className="button" onClick={action || back}>
+			{children}
 			<span>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

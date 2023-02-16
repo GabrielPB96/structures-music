@@ -13,8 +13,16 @@ const AuthContext = createContext({
 });
 
 const AuthProvider = ({ children }: any) => {
-	const [user, setUser] = useState<any>(auth.currentUser);
-	const [pathFile, setPathFile] = useState("");
+	const [user, setUser] = useState<any>(() => {
+		const userLocalStorage = localStorage.getItem("user");
+		if (userLocalStorage) return JSON.parse(userLocalStorage);
+		return auth.currentUser;
+	});
+	const [pathFile, setPathFile] = useState(() => {
+		const pathFileLocalStorage = localStorage.getItem("pathFile");
+		if (pathFileLocalStorage) return pathFileLocalStorage;
+		return "";
+	});
 	useEffect(() => {
 		stateChanged(setUser, setPathFile);
 	}, []);

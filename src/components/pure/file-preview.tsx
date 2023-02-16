@@ -39,6 +39,7 @@ const FilePreview = ({
 					className="component-list-content"
 					onClick={() => {
 						setPathFile(pathFile);
+						localStorage.setItem("pathFile", pathFile);
 					}}
 				>
 					<header className="component-list-header">

@@ -48,7 +48,9 @@ const DashBoard = () => {
 					<div className="dashboard-nav-links-separator"></div>
 					<Link to="/profile">Profile</Link>
 				</div>
-				<BackBtn action={hadleLogout} />
+				<BackBtn action={hadleLogout} >
+					logout
+				</BackBtn>
 			</nav>
 			<main className="dashboard-main">
 				{USER ? <Profile user2={USER} /> : "..."}

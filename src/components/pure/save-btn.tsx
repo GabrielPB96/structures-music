@@ -1,11 +1,13 @@
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 
 type Props = {
 	action?: MouseEventHandler;
+	children?:ReactNode
 };
-const SaveBtn = ({ action }: Props) => {
+const SaveBtn = ({ action,children }: Props) => {
 	return (
 		<button className="button" onClick={action}>
+			{children}
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="16"
