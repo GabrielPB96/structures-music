@@ -16,12 +16,12 @@
 	/*Posicionamiento*/
 	position: relative;
 	/*Box Model*/
-	width: 80%;
+	width: min-content;
 	display: grid;
-	grid-template-columns: 45% 45%;
+	grid-template-columns: 45% min-content;
 	justify-content: center;
 	align-items: center;
-	gap: 5%;
+	gap: 1rem;
 	/*Texto*/
 	/*Visuales*/
 	/*otros*/
@@ -39,15 +39,20 @@
 	padding: 0;
 }
 
-.search {
+#search {
 	width: 100%;
-	justify-content: center;
+	display: grid;
+	grid-template-columns: auto min-content;
+	gap: 1rem;
+}
+#search-button {
+	padding: 0.3rem;
 }
 
 .menu-bar-options-files {
 	position: absolute;
-	left: 2px;
-	top: 2.7rem;
+	left: -.7rem;
+	top: 2.5rem;
 	z-index: 999;
 
 	display: none;
@@ -94,7 +99,7 @@
 /*
   AGREGAR MEDIA QUERIES OJOOOOOOOOOOOOOOOOO
 */
-@media (min-width: 470px) {
+@media (min-width: 570px) {
 	.btn-menu {
 		display: none;
 	}
@@ -109,5 +114,15 @@
 		display: flex;
 		flex-direction: row;
 		gap: 1rem;
+	}
+
+	.menu-bar-options-files {
+		justify-content: end;
+	}
+
+	.menu-bar-options {
+		width: 100%;
+		padding-right: 1rem;
+		justify-content: end;
 	}
 }

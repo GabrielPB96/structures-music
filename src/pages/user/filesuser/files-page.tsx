@@ -37,7 +37,7 @@ const Header = ({ title }: { title: string }) => {
 
 const FilesPage = () => {
 	const { pathFile } = useContext(AuthContext);
-	const { directory } = useReadFileUser();
+	const { directory, search, resetDirectory } = useReadFileUser();
 
 	const [modalCreate, setModalCreate] = useState<boolean>(false);
 	const [modalConfirmRemove, setModalConfirmRemove] = useState<boolean>(false);
@@ -70,7 +70,8 @@ const FilesPage = () => {
 
 					<MenuBar
 						newFolder={setModalCreate}
-						currentFolder={directory.content}
+						search={search}
+						resetDirectory={resetDirectory}
 					/>
 					<main className="main-app main-files-user">
 						{directory.state === StateReadFile.LOADING ? (

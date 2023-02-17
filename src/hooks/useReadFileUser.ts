@@ -1,7 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { off, onValue, ref } from "firebase/database";
-import { StateRead, StateReadFile, objectToArray } from "../utils/utils";
+import {
+	StateRead,
+	StateReadFile,
+	objectToArray,
+	searchFile,
+} from "../utils/utils";
 import { db, readGetOnce } from "../firebase/firebase-realdatabase";
 
 export function useReadFileUser() {
@@ -11,12 +16,15 @@ export function useReadFileUser() {
 		content: [],
 	});
 
+	const directoryStorage = useRef(null);
+
 	useEffect(() => {
 		const refDirectory = ref(db, pathFile);
 		const callBackOnValue = (snapshot: any) => {
 			try {
 				const data = snapshot.val();
 				let list = data._children && objectToArray(data._children);
+				if (!directoryStorage.current) directoryStorage.current = list;
 				if (list) {
 					setDirectory({
 						state: StateReadFile.FOLDER,
@@ -43,10 +51,28 @@ export function useReadFileUser() {
 				});
 			}
 		});
+
 		return () => {
 			off(refDirectory, "value", callBackOnValue);
 		};
 	}, [pathFile]);
 
-	return { directory };
+	const search = (nameFile: string) => {
+		if (nameFile.length) {
+			const filesFound = searchFile(directory.content, nameFile);
+			setDirectory({
+				state: directory.state,
+				content: filesFound,
+			});
+		}
+	};
+
+	const resetDirectory = () => {
+		setDirectory({
+			state: directory.state,
+			content: directoryStorage.current,
+		});
+	};
+
+	return { directory, search, resetDirectory };
 }

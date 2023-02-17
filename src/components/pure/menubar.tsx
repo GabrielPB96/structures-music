@@ -5,27 +5,25 @@ import "../../styles/style-menu-bar.css";
 //utils
 import { iconsPaths } from "../../utils/icons";
 import BackBtn from "./back-btn";
-import { searchFile } from "../../utils/utils";
-import { ChangeEvent, useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
-import { off, onValue, ref } from "firebase/database";
 import {
-	db,
 	readGetOnce,
 	updateDataPath,
 } from "../../firebase/firebase-realdatabase";
 import { File } from "../../models/structure-files/file.class";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
 	newFolder: Function;
-	//TODO: REVISAR EL TIPO
-	currentFolder: any;
+	search: Function;
+	resetDirectory:Function
 };
 
-const MenuBar = ({ newFolder, currentFolder }: Props) => {
+const MenuBar = ({ newFolder, search,resetDirectory }: Props) => {
 	const navigation = useNavigate();
 	const { pathFile, setPathFile } = useContext(AuthContext);
+	const [textSearch, setTextSearch] = useState("");
 
 	const hadleNewFolder = () => {
 		newFolder(true);
@@ -46,25 +44,29 @@ const MenuBar = ({ newFolder, currentFolder }: Props) => {
 		setPathFile(`${pathFile}/_children/New File`);
 	};
 
-	const hadleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-		let textInput = event.target.value;
-		searchFile(currentFolder || [], textInput);
+	const hadleSearch = () => {
+		search(textSearch);
 	};
 
 	return (
 		<nav className="nav-menu-files">
 			<div className="menu-bar">
-				<div className="search container-input-label ">
+				<div className="container-input-label" id="search">
 					<input
 						type="search"
 						id="search"
+						value={textSearch}
 						placeholder="Search File"
 						className="search-input"
-						onChange={hadleSearch}
+						onChange={(event) => {
+							const text = event.target.value;
+							if(!text.length) resetDirectory()
+							setTextSearch(text);
+						}}
 					/>
-					{/* <span className="span-icon-form menu-bar-search-icon">
-						<Icon width={17} height={17} paths={iconsPaths.search} />
-					</span> */}
+					<button className="button" id="search-button" onClick={hadleSearch}>
+						search
+					</button>
 				</div>
 
 				<div className="menu-bar-options">

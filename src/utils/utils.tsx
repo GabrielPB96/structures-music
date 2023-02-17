@@ -13,7 +13,7 @@ export enum StateReadFile {
 }
 export type StateRead = {
 	state: StateReadFile;
-	content: TypeChildren[] | File;
+	content: any;
 };
 
 export interface TypeChildren {
@@ -95,7 +95,7 @@ export const removeLastFileFromPath = (path: string) => {
 	return pathArray.join("/");
 };
 
-const objetoFolderToFolder = (ob: Folder) => {
+const objetoFolderToFolder = (ob: any) => {
 	let fold = new Folder(ob._name, ob._path);
 	if (ob._children) {
 		for (let childKey in ob._children) {
@@ -103,24 +103,23 @@ const objetoFolderToFolder = (ob: Folder) => {
 			if (child._type === TypeArchive.FILE) {
 				fold.add(new File(child.name, child.path));
 			} else {
-				if (child instanceof Folder) {
-					let childFold = objetoFolderToFolder(child);
-					fold.add(childFold);
-				}
+				let childFold = objetoFolderToFolder(child);
+				fold.add(childFold);
 			}
 		}
 	}
 	return fold;
 };
 
-export const searchFile = (fold: Content[], nameFile: string): Content[] => {
-	let filesMacht: Content[] = [];
-	let file: Content;
+export const searchFile = (fold: any, nameFile: string):any => {
+	let filesMacht = [];
+	let file: any;
 	for (file of fold) {
 		if (file._name.toLowerCase().startsWith(nameFile.toLowerCase())) {
 			filesMacht.push(file);
 		}
-		if (file instanceof Folder && file._children) {
+
+		if (file._type === "folder" && file._children) {
 			let newFold: Content[] = objectToArray(file._children);
 			if (newFold) filesMacht.push(...searchFile(newFold, nameFile));
 		}
