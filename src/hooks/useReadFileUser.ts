@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { off, onValue, ref } from "firebase/database";
 import {
@@ -13,44 +13,49 @@ export function useReadFileUser() {
 	const { pathFile } = useContext(AuthContext);
 	const [directory, setDirectory] = useState<StateRead>({
 		state: StateReadFile.LOADING,
-		content: [],
+		content: null,
 	});
 
 	const directoryStorage = useRef(null);
 
-	useEffect(() => {
-		const refDirectory = ref(db, pathFile);
-		const callBackOnValue = (snapshot: any) => {
-			try {
-				const data = snapshot.val();
-				let list = data._children && objectToArray(data._children);
-				if (!directoryStorage.current) directoryStorage.current = list;
-				if (list) {
-					setDirectory({
-						state: StateReadFile.FOLDER,
-						content: list,
-					});
-				} else {
-					setDirectory({
-						state: StateReadFile.EMPTY,
-						content: [],
-					});
-				}
-			} catch (error) {
-				console.log("error : Read folder");
-			}
-		};
-		readGetOnce(pathFile).then((dataPath) => {
-			if (dataPath._type === "folder") {
-				//establecer el escucha
-				onValue(refDirectory, callBackOnValue);
+	const callBackOnValue = useCallback((snapshot: any) => {
+		try {
+			const data = snapshot.val();
+			let list = data._children && objectToArray(data._children);
+			if (!directoryStorage.current) directoryStorage.current = list;
+			if (list) {
+				setDirectory({
+					state: StateReadFile.FOLDER,
+					content: list,
+				});
 			} else {
 				setDirectory({
-					state: StateReadFile.FILE,
-					content: dataPath,
+					state: StateReadFile.EMPTY,
+					content: null,
 				});
 			}
-		});
+		} catch (error) {
+			console.log("error : Read folder");
+		}
+	}, []);
+
+	useEffect(() => {
+		const refDirectory = ref(db, pathFile);
+		try {
+			readGetOnce(pathFile).then((dataPath) => {
+				if (dataPath._type === "folder") {
+					//establecer el escucha
+					onValue(refDirectory, callBackOnValue);
+				} else {
+					setDirectory({
+						state: StateReadFile.FILE,
+						content: dataPath,
+					});
+				}
+			});
+		} catch (error) {
+			console.log("error : Read file");
+		}
 
 		return () => {
 			off(refDirectory, "value", callBackOnValue);

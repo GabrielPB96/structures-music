@@ -49,7 +49,15 @@ export const stateChanged = (setUser: any, setPathFile: any) => {
 			const userLocalStore = localStorage.getItem("user");
 			if (!userLocalStore) {
 				setUser(user);
-				localStorage.setItem("user", JSON.stringify(user));
+				localStorage.setItem(
+					"user",
+					JSON.stringify({
+						displayName: user.displayName,
+						email: user.email,
+						photoURL: user.photoURL,
+						uid: user.uid,
+					})
+				);
 			}
 			const pathLocalStorage = localStorage.getItem("pathFile");
 			if (!pathLocalStorage) {

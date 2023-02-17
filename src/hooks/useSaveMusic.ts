@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import {
 	readGetOnce,
 	removeFileWithPath,
 	updateDataPath,
 } from "../firebase/firebase-realdatabase";
 import AuthContext from "../context/AuthContext";
-import MetronomeContext from "../context/MetronomeContext";
+import MetronomeContext, { StateMetronome } from "../context/MetronomeContext";
 type Props = {
 	props: File | any;
 };
@@ -29,52 +29,68 @@ export function useSaveMusic({ props }: Props) {
 		setStateMetronome(initState);
 	}, []);
 
-	const saveMusic = async () => {
-		setGuardando(true);
-		const data = await readGetOnce(pathFile);
+	const saveMusic = useCallback(
+		async ({
+			title,
+			autor,
+			album,
+			stateMetronome,
+			estructura,
+		}: {
+			title: string;
+			autor: string;
+			album: string;
+			stateMetronome: StateMetronome;
+			estructura: string;
+		}) => {
+			setGuardando(true);
+			const data = await readGetOnce(pathFile);
 
-		let father = pathFile.split("/");
-		father = father.slice(0, father.length - 1);
-		const pathFather = father.join("/");
+			let father = pathFile.split("/");
+			father = father.slice(0, father.length - 1);
+			const pathFather = father.join("/");
 
-		let newData = {
-			...data,
-			["_name"]: `${title}`,
-			["_music"]: {
-				...data._music,
-				["_title"]: `${title}`,
-				["_album"]: `${album}`,
-				["_autor"]: `${autor}`,
-				["_structure"]: `${estructura}`,
-				["_metronome"]: {
-					["bpm"]: stateMetronome.bpm,
-					["compass"]: stateMetronome.compass,
-					["statePoints"]: stateMetronome.statePoints,
+			let newData = {
+				...data,
+				["_name"]: `${title}`,
+				["_music"]: {
+					...data._music,
+					["_title"]: `${title}`,
+					["_album"]: `${album}`,
+					["_autor"]: `${autor}`,
+					["_structure"]: `${estructura}`,
+					["_metronome"]: {
+						["bpm"]: stateMetronome.bpm,
+						["compass"]: stateMetronome.compass,
+						["statePoints"]: stateMetronome.statePoints,
+					},
 				},
-			},
-			["_path"]: `${pathFather}/${title}`,
-		};
+				["_path"]: `${pathFather}/${title}`,
+			};
 
-		if (
-			data._name !== title ||
-			data._music._autor !== autor ||
-			data._music._album !== album ||
-			data._music._structure !== estructura ||
-			data._music._metronome !== stateMetronome
-		) {
-			await updateDataPath(pathFile, newData);
-		}
-		if (data._name !== title) {
-			const dataFather = await readGetOnce(pathFather);
-			await updateDataPath(pathFather, {
-				...dataFather,
-				[`${title}`]: newData,
-			});
-			await removeFileWithPath(pathFile);
-		}
+			if (
+				data._name !== title ||
+				data._music._autor !== autor ||
+				data._music._album !== album ||
+				data._music._structure !== estructura ||
+				JSON.stringify(data._music._metronome) !==
+					JSON.stringify(stateMetronome)
+			) {
+				await updateDataPath(pathFile, newData);
+			}
+			if (data._name !== title) {
+				const dataFather = await readGetOnce(pathFather);
+				await updateDataPath(pathFather, {
+					...dataFather,
+					[`${title}`]: newData,
+				});
+				await removeFileWithPath(pathFile);
+			}
 
-		setGuardando(false);
-	};
+			setGuardando(false);
+		},
+		[]
+	);
 
 	return {
 		saveMusic,
@@ -83,6 +99,7 @@ export function useSaveMusic({ props }: Props) {
 		estructura,
 		album,
 		guardando,
+		stateMetronome,
 		setAutor,
 		setAlbum,
 		setEstructura,

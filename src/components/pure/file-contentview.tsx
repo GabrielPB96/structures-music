@@ -23,11 +23,16 @@ const FileContentView = ({ props }: Props) => {
 		estructura,
 		album,
 		guardando,
+		stateMetronome,
 		setAutor,
 		setAlbum,
 		setEstructura,
 		setTitle,
 	} = useSaveMusic({ props });
+
+	const hadleSave = () => {
+		saveMusic({title, autor, album, stateMetronome, estructura});
+	}
 
 	return (
 		<div className="page-file-music">
@@ -49,7 +54,7 @@ const FileContentView = ({ props }: Props) => {
 						<BackBtn />
 					</div>
 					<div className={`save-button`}>
-						<SaveBtn action={saveMusic}>save</SaveBtn>
+						<SaveBtn action={hadleSave}>save</SaveBtn>
 					</div>
 				</div>
 

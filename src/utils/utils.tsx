@@ -6,10 +6,10 @@ import { TypeArchive } from "../models/type-archive.enum";
 import { Content } from "../models/structure-files/content.interface";
 
 export enum StateReadFile {
-	LOADING,
-	EMPTY,
-	FILE,
-	FOLDER,
+	LOADING = "LOADING",
+	EMPTY = "EMPTY",
+	FILE = "FILE",
+	FOLDER = "FOLDER",
 }
 export type StateRead = {
 	state: StateReadFile;
@@ -111,7 +111,7 @@ const objetoFolderToFolder = (ob: any) => {
 	return fold;
 };
 
-export const searchFile = (fold: any, nameFile: string):any => {
+export const searchFile = (fold: any, nameFile: string): any => {
 	let filesMacht = [];
 	let file: any;
 	for (file of fold) {

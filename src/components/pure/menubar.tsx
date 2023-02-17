@@ -42,6 +42,7 @@ const MenuBar = ({ newFolder, search,resetDirectory }: Props) => {
 		await updateDataPath(pathFile, newData);
 		navigation(`/musics/New File`);
 		setPathFile(`${pathFile}/_children/New File`);
+		localStorage.setItem("pathFile", `${pathFile}/_children/New File`)
 	};
 
 	const hadleSearch = () => {
