@@ -22,10 +22,11 @@ import {
 } from "../../../utils/utils";
 import ConfirmModal from "../../../components/pure/confirm-modal";
 import FileContentView from "../../../components/pure/file-contentview";
-import { useReadFileUser } from "../../../hooks/useReadFileUser";
 import ListOfFiles from "../../../components/container/list-of-files";
 import EmptyDirectory from "../../../components/pure/empty-directory";
 import { MetronomeProvider } from "../../../context/MetronomeContext";
+
+import { useReadFile } from "../../../hooks/useReadFile";
 
 const Header = ({ title }: { title: string }) => {
 	return (
@@ -37,7 +38,7 @@ const Header = ({ title }: { title: string }) => {
 
 const FilesPage = () => {
 	const { pathFile } = useContext(AuthContext);
-	const { directory, search, resetDirectory } = useReadFileUser();
+	const { directory, search, resetDirectory } = useReadFile();
 
 	const [modalCreate, setModalCreate] = useState<boolean>(false);
 	const [modalConfirmRemove, setModalConfirmRemove] = useState<boolean>(false);

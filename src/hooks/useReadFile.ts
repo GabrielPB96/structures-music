@@ -7,33 +7,43 @@ import {
 	objectToArray,
 	searchFile,
 } from "../utils/utils";
-import { db, readGetOnce } from "../firebase/firebase-realdatabase";
+import { db} from "../firebase/firebase-realdatabase";
 
-export function useReadFileUser() {
-	const { pathFile } = useContext(AuthContext);
+export function useReadFile() {
+	const { user, pathFile } = useContext(AuthContext);
 	const [directory, setDirectory] = useState<StateRead>({
 		state: StateReadFile.LOADING,
 		content: null,
 	});
 
-	const directoryStorage = useRef(null);
+	const refDir = useRef<any>();
+
+	const directoryStorage = useRef<any>(null);
 
 	const callBackOnValue = useCallback((snapshot: any) => {
 		try {
 			const data = snapshot.val();
 			let list = data._children && objectToArray(data._children);
-			if (!directoryStorage.current) directoryStorage.current = list;
+			let newStateContent: StateRead = {
+				state: StateReadFile.EMPTY,
+				content: null,
+			};
 			if (list) {
-				setDirectory({
+				directoryStorage.current = [...list];
+				newStateContent = {
 					state: StateReadFile.FOLDER,
-					content: list,
-				});
+					content: [...list],
+				};
 			} else {
-				setDirectory({
-					state: StateReadFile.EMPTY,
-					content: null,
-				});
+				if (data._type === "file") {
+					newStateContent = {
+						state: StateReadFile.FILE,
+						content: { ...data },
+					};
+					off(refDir.current, "value", callBackOnValue);
+				}
 			}
+			setDirectory(newStateContent);
 		} catch (error) {
 			console.log("error : Read folder");
 		}
@@ -41,20 +51,10 @@ export function useReadFileUser() {
 
 	useEffect(() => {
 		const refDirectory = ref(db, pathFile);
-		try {
-			readGetOnce(pathFile).then((dataPath) => {
-				if (dataPath._type === "folder") {
-					//establecer el escucha
-					onValue(refDirectory, callBackOnValue);
-				} else {
-					setDirectory({
-						state: StateReadFile.FILE,
-						content: dataPath,
-					});
-				}
-			});
-		} catch (error) {
-			console.log("error : Read file");
+		refDir.current = refDirectory;
+
+		if (user) {
+			onValue(refDirectory, callBackOnValue);
 		}
 
 		return () => {
@@ -67,7 +67,7 @@ export function useReadFileUser() {
 			const filesFound = searchFile(directory.content, nameFile);
 			setDirectory({
 				state: directory.state,
-				content: filesFound,
+				content: [...filesFound],
 			});
 		}
 	};
@@ -75,7 +75,7 @@ export function useReadFileUser() {
 	const resetDirectory = () => {
 		setDirectory({
 			state: directory.state,
-			content: directoryStorage.current,
+			content: [...directoryStorage.current],
 		});
 	};
 
