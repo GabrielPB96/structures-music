@@ -9,8 +9,11 @@ import "../../styles/style-file-music.css";
 import BackBtn from "./back-btn";
 import SaveBtn from "./save-btn";
 import Loading from "./loading";
+import Icon from "../pure/icon";
 
 import { useSaveMusic } from "../../hooks/useSaveMusic";
+import { iconsPaths } from "../../utils/icons";
+import { useState } from "react";
 
 type Props = {
 	props: File | any;
@@ -30,9 +33,11 @@ const FileContentView = ({ props }: Props) => {
 		setTitle,
 	} = useSaveMusic({ props });
 
+	const [readOnly, setReadOnly] = useState(false);
+
 	const hadleSave = () => {
-		saveMusic({title, autor, album, stateMetronome, estructura});
-	}
+		saveMusic({ title, autor, album, stateMetronome, estructura });
+	};
 
 	return (
 		<div className="page-file-music">
@@ -106,6 +111,22 @@ const FileContentView = ({ props }: Props) => {
 					}}
 				/>
 				<section className="container-structure">
+					<div className="container-structure-info">
+						<p>Structure</p>
+						<button
+							className="button"
+							id="button-lock"
+							onClick={() => {
+								setReadOnly(!readOnly);
+							}}
+						>
+							{readOnly ? (
+								<Icon paths={iconsPaths.lockFill} width={16} height={16} />
+							) : (
+								<Icon paths={iconsPaths.unlockFill} width={16} height={16} />
+							)}
+						</button>
+					</div>
 					<textarea
 						className="textarea-structure"
 						id="structure"
@@ -113,6 +134,7 @@ const FileContentView = ({ props }: Props) => {
 						onChange={(event) => {
 							setEstructura(event.target.value);
 						}}
+						readOnly={readOnly}
 					/>
 				</section>
 			</main>
