@@ -7,7 +7,7 @@ import {
 	objectToArray,
 	searchFile,
 } from "../utils/utils";
-import { db} from "../firebase/firebase-realdatabase";
+import { db } from "../firebase/firebase-realdatabase";
 
 export function useReadFile() {
 	const { user, pathFile } = useContext(AuthContext);
@@ -63,20 +63,35 @@ export function useReadFile() {
 	}, [pathFile]);
 
 	const search = (nameFile: string) => {
-		if (nameFile.length) {
-			const filesFound = searchFile(directory.content, nameFile);
-			setDirectory({
+		const nameValid = nameFile.trim();
+		if (nameValid.length) {
+			const filesFound = searchFile(directory.content, nameValid);
+			let stateResponse: StateRead = {
 				state: directory.state,
 				content: [...filesFound],
-			});
+			};
+			if (!filesFound.length) {
+				stateResponse = {
+					state: StateReadFile.SEARCH_EMPTY,
+					content: null,
+				};
+			}
+			setDirectory(stateResponse);
 		}
 	};
 
 	const resetDirectory = () => {
-		setDirectory({
-			state: directory.state,
-			content: [...directoryStorage.current],
-		});
+		if (directoryStorage.current) {
+			setDirectory({
+				state: directory.state,
+				content: [...directoryStorage.current],
+			});
+		} else {
+			setDirectory({
+				state: StateReadFile.EMPTY,
+				content: null,
+			});
+		}
 	};
 
 	return { directory, search, resetDirectory };

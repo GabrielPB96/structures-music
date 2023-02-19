@@ -10,6 +10,7 @@ export enum StateReadFile {
 	EMPTY = "EMPTY",
 	FILE = "FILE",
 	FOLDER = "FOLDER",
+	SEARCH_EMPTY = "SEARCH_EMPTY",
 }
 export type StateRead = {
 	state: StateReadFile;
@@ -114,15 +115,29 @@ const objetoFolderToFolder = (ob: any) => {
 export const searchFile = (fold: any, nameFile: string): any => {
 	let filesMacht = [];
 	let file: any;
-	for (file of fold) {
-		if (file._name.toLowerCase().startsWith(nameFile.toLowerCase())) {
-			filesMacht.push(file);
-		}
+	if (fold) {
+		for (file of fold) {
+			if (file._name.toLowerCase().startsWith(nameFile.toLowerCase())) {
+				filesMacht.push(file);
+			}
 
-		if (file._type === "folder" && file._children) {
-			let newFold: Content[] = objectToArray(file._children);
-			if (newFold) filesMacht.push(...searchFile(newFold, nameFile));
+			if (file._type === "folder" && file._children) {
+				let newFold: Content[] = objectToArray(file._children);
+				if (newFold) filesMacht.push(...searchFile(newFold, nameFile));
+			}
 		}
 	}
 	return filesMacht;
+};
+
+export const getFormatDate = (date: string) => {
+	const dateArray = date.split(" ");
+	if (dateArray.length < 6) return "0 de 0 de 0 00:00:00";
+	const year = dateArray[4];
+	let format = `${dateArray.slice(0, 3)}`;
+	if (parseInt(year, 10) !== new Date().getFullYear()) {
+		format += ` de ${dateArray[4]}`;
+	}
+	format = `${format.replace(/,/g, " ")} ${dateArray.pop()}`;
+	return format;
 };

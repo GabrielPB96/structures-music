@@ -13,9 +13,15 @@ const ListOfFiles: FC<Props> = ({ directory, actionRemove }) => {
 				<ComponentList
 					type={e._type}
 					title={e._name}
-					textPreview={e._textPreview}
+					textPreview={
+						e._music
+							? (e._music._structure.length &&
+									e._music._structure.slice(0, 50)) ||
+							  "No Text"
+							: ""
+					}
 					createDate={e._creationDate}
-					key={`clp${k}`}
+					key={e._uid}
 					pathFile={e._path}
 					actionRemove={actionRemove}
 				/>

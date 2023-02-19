@@ -52,37 +52,37 @@ export function useSaveMusic({ props }: Props) {
 
 			let newData = {
 				...data,
-				["_name"]: `${title}`,
+				["_name"]: `${title.trim()}`,
 				["_music"]: {
 					...data._music,
-					["_title"]: `${title}`,
-					["_album"]: `${album}`,
-					["_autor"]: `${autor}`,
-					["_structure"]: `${estructura}`,
+					["_title"]: `${title.trim()}`,
+					["_album"]: `${album.trim()}`,
+					["_autor"]: `${autor.trim()}`,
+					["_structure"]: `${estructura.trim()}`,
 					["_metronome"]: {
 						["bpm"]: stateMetronome.bpm,
 						["compass"]: stateMetronome.compass,
 						["statePoints"]: stateMetronome.statePoints,
 					},
 				},
-				["_path"]: `${pathFather}/${title}`,
+				["_path"]: `${pathFather}/${title.trim()}`,
 			};
 
 			if (
-				data._name !== title ||
-				data._music._autor !== autor ||
-				data._music._album !== album ||
-				data._music._structure !== estructura ||
+				data._name !== title.trim() ||
+				data._music._autor !== autor.trim() ||
+				data._music._album !== album.trim() ||
+				data._music._structure !== estructura.trim() ||
 				JSON.stringify(data._music._metronome) !==
 					JSON.stringify(stateMetronome)
 			) {
 				await updateDataPath(pathFile, newData);
 			}
-			if (data._name !== title) {
+			if (data._name !== title.trim()) {
 				const dataFather = await readGetOnce(pathFather);
 				await updateDataPath(pathFather, {
 					...dataFather,
-					[`${title}`]: newData,
+					[`${title.trim()}`]: newData,
 				});
 				await removeFileWithPath(pathFile);
 			}

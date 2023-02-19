@@ -27,6 +27,7 @@ import EmptyDirectory from "../../../components/pure/empty-directory";
 import { MetronomeProvider } from "../../../context/MetronomeContext";
 
 import { useReadFile } from "../../../hooks/useReadFile";
+import SearchEmpty from "../../../components/pure/search-empty";
 
 const Header = ({ title }: { title: string }) => {
 	return (
@@ -82,7 +83,9 @@ const FilesPage = () => {
 								directory={directory.content}
 								actionRemove={hadleRemove}
 							/>
-						) : (
+							) : (
+									directory.state === StateReadFile.SEARCH_EMPTY ? 
+										<SearchEmpty /> :
 							<EmptyDirectory />
 						)}
 					</main>

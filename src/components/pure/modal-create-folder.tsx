@@ -36,7 +36,7 @@ const CreateFolder = ({ cancel, action }: Props) => {
 					validationSchema={folderSchema}
 					onSubmit={async (values: any) => {
 						try {
-							await hadleAction(values.name);
+							await hadleAction(values.name.trim());
 						} catch (error) {}
 					}}
 				>
@@ -56,7 +56,9 @@ const CreateFolder = ({ cancel, action }: Props) => {
 							{errors.name && touched.name && (
 								<ErrorMessage name="name" component="div"></ErrorMessage>
 							)}
-							<button className="button" type="submit">Create Folder</button>
+							<button className="button" type="submit">
+								Create Folder
+							</button>
 							<button className="button" type="button" onClick={hadleCancel}>
 								Cancel
 							</button>

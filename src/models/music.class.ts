@@ -17,7 +17,7 @@ export class Music {
 		this._autor = autor || "unknown";
 		this._album = album || "unknown";
 		this._metronome = metronome;
-		this._structure = "...";
+		this._structure = "";
 	}
 	public get title() {
 		return this._title;

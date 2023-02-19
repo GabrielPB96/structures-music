@@ -58,6 +58,9 @@ h4 > span {
 
 	color: rgb(131, 124, 124);
 }
+.date{
+	font-size: .7rem;
+}
 
 .component-list-options {
 	width: 100%;

@@ -5,7 +5,7 @@ import Icon from "./icon";
 import { iconsPaths } from "../../utils/icons";
 //styles
 import "../../styles/style-component-list.css";
-import { lastFileFromUrl } from "../../utils/utils";
+import { getFormatDate, lastFileFromUrl } from "../../utils/utils";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 
@@ -27,7 +27,7 @@ const FilePreview = ({
 	actionRemove,
 }: Props) => {
 	const { setPathFile } = useContext(AuthContext);
-	const date = createDate;
+	const date = getFormatDate(createDate);
 	const remove = async () => {
 		await actionRemove(pathFile);
 	};
