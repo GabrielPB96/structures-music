@@ -24,10 +24,17 @@ export class Folder extends Content {
 		let count: number = 0;
 		for (let ob in this._children) {
 			let current: Content = this._children[ob];
-			if (current.type === TypeArchive.FOLDER) {
-				count += current.size();
-			} else {
-				count += current.size();
+			count += current.size();
+		}
+		return count;
+	}
+
+	public countFolders(): number {
+		let count: number = 0;
+		for (let ob in this._children) {
+			let current: Content = this._children[ob];
+			if (current instanceof Folder) {
+				count += 1 + current.countFolders();
 			}
 		}
 		return count;

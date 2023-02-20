@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { auth, stateChanged } from "../firebase/firebase-utils.js";
+import { UserAuth } from "../models/user-auth.js";
 
 const AuthContext = createContext({
 	user: {
@@ -13,7 +14,7 @@ const AuthContext = createContext({
 });
 
 const AuthProvider = ({ children }: any) => {
-	const [user, setUser] = useState<any>(() => {
+	const [user, setUser] = useState<UserAuth>(() => {
 		const userLocalStorage = localStorage.getItem("user");
 		if (userLocalStorage) return JSON.parse(userLocalStorage);
 		return auth.currentUser;

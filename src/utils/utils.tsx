@@ -96,13 +96,13 @@ export const removeLastFileFromPath = (path: string) => {
 	return pathArray.join("/");
 };
 
-const objetoFolderToFolder = (ob: any) => {
+export const objetoFolderToFolder = (ob: any) => {
 	let fold = new Folder(ob._name, ob._path);
 	if (ob._children) {
 		for (let childKey in ob._children) {
 			let child = ob._children[childKey];
 			if (child._type === TypeArchive.FILE) {
-				fold.add(new File(child.name, child.path));
+				fold.add(new File(child._name, child._path));
 			} else {
 				let childFold = objetoFolderToFolder(child);
 				fold.add(childFold);
