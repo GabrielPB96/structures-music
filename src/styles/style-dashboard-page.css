@@ -27,8 +27,6 @@
 	gap: 0.5rem;
 }
 
-
-
 .dashboard-nav button {
 	padding: 0.5rem;
 }
@@ -36,7 +34,14 @@
 @media (min-width: 600px) {
 	.dashboard-main {
 		grid-template-areas: "card-user content";
-		grid-template-columns: 50% 50%;
+		grid-template-columns: min-content 1fr;
 		align-items: center;
+		justify-content: center;
+	}
+}
+
+@media (min-width: 900px) {
+	.dashboard-main {
+		grid-template-columns: min-content 0.7fr;
 	}
 }

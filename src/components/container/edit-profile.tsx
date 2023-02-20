@@ -1,22 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import { getUserNameFromEmail } from "../../utils/utils";
 import BackBtn from "../pure/back-btn";
 
 import "../../styles/style-edit-profile.css";
 
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { updateProfile } from "../../firebase/firebase-utils";
 import { useNavigate } from "react-router-dom";
-
-const schema = Yup.object().shape({
-	username: Yup.string()
-		.min(10, "UserName es muy corto")
-		.max(20, "UserName es muy largo"),
-	email: Yup.string().email("Formato Invalido").required("Email es requerido"),
-	photoURL: Yup.string().url("Formato Invalido"),
-});
+import Loading from "../pure/loading";
+import CardProfile from "../pure/card-profile";
 
 const EditProfile = () => {
 	const { user } = useContext(AuthContext);
@@ -25,6 +17,10 @@ const EditProfile = () => {
 		email: `${user.email}`,
 		photoURL: `${user.photoURL || ""}`,
 	};
+
+	const [username, setUserName] = useState(initValues.username);
+	const [email, setEmail] = useState(initValues.email);
+	const [sending, setSending] = useState(false);
 
 	const navigation = useNavigate();
 
@@ -39,56 +35,57 @@ const EditProfile = () => {
 				<BackBtn />
 			</header>
 			<section className="edit-profile-container-form">
-				<Formik
-					initialValues={initValues}
-					validationSchema={schema}
-					onSubmit={async (values) => {
-						await updateProfile({
-							displayName: values.username,
-							email: values.email,
-							photoURL: values.photoURL,
-						});
+				<div className="container-card-profile">
+					<CardProfile />
+				</div>
+				<form
+					onSubmit={async (event) => {
+						event.preventDefault();
+						setSending(true);
+						try {
+							await updateProfile({
+								displayName: username.trim(),
+							});
+							const userStorage = JSON.parse(
+								localStorage.getItem("user") || ""
+							);
+							const upUser = { ...userStorage, displayName: username };
+							localStorage.setItem("user", JSON.stringify(upUser));
+						} catch (error) {
+							console.log(error);
+						} finally {
+							setSending(false);
+						}
 					}}
 				>
-					{({ touched, errors, isSubmitting }) => (
-						<Form>
-							<div className="container-inputs">
-								<label htmlFor="username">UserName</label>
-								<Field type="text" id="username" name="username" />
-								{errors.username && touched.username && (
-									<ErrorMessage name="username" component="div"></ErrorMessage>
-								)}
-							</div>
-							<div className="container-inputs">
-								<label htmlFor="email">Email</label>
-								<Field type="email" id="email" name="email" />
-								{errors.email && touched.email && (
-									<ErrorMessage name="email" component="div"></ErrorMessage>
-								)}
-							</div>
-							<div className="container-inputs">
-								<label htmlFor="photoURL">Avatar URL</label>
-								<Field type="url" id="photoURL" name="photoURL" />
-								{errors.photoURL && touched.photoURL && (
-									<ErrorMessage
-										name="photoURL"
-										component={"div"}
-									></ErrorMessage>
-								)}
-							</div>
-							<div className="container-buttons">
-								<button className="button" type="submit">
-									Save
-								</button>
-								<button className="button" type="button" onClick={cancel}>
-									Cancel
-								</button>
-							</div>
-							{isSubmitting ? <p>Sending...</p> : null}
-						</Form>
-					)}
-				</Formik>
+					<div className="container-inputs container-input-username">
+						<label htmlFor="username">UserName</label>
+						<input
+							type="text"
+							id="username"
+							value={username}
+							required
+							onChange={(event) => {
+								const name = event.target.value;
+								setUserName(name);
+							}}
+						/>
+					</div>
+					<div className="container-inputs">
+						<label htmlFor="email">Email</label>
+						<input type="email" id="email" value={email} disabled />
+					</div>
+					<div className="container-buttons">
+						<button type="submit" className="button">
+							Save
+						</button>
+						<button onClick={cancel} className="button">
+							Cancel
+						</button>
+					</div>
+				</form>
 			</section>
+			{sending && <Loading />}
 		</div>
 	);
 };

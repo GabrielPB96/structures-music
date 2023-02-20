@@ -40,105 +40,113 @@ const FileContentView = ({ props }: Props) => {
 	};
 
 	return (
-		<div className="page-file-music">
-			<header className="header-app page-file-music-header">
-				<div className="container-title">
-					<h1>
-						<input
-							className="input-title"
-							type="text"
-							name="title"
-							id="title"
-							value={title}
-							onChange={(event) => {
-								setTitle(event.target.value);
-							}}
-						/>
-					</h1>
-					<div className="back-button">
-						<BackBtn />
-					</div>
-					<div className={`save-button`}>
-						<SaveBtn action={hadleSave}>save</SaveBtn>
-					</div>
+		<div className="page-file">
+			<div className="page-file-buttons">
+				<div className="back-button">
+					<BackBtn />
 				</div>
+				<div className={`save-button`}>
+					<SaveBtn action={hadleSave}>save</SaveBtn>
+				</div>
+			</div>
+			<div className="page-file-music">
+				<header className="header-app page-file-music-header">
+					<div className="container-title">
+						<h1>
+							<textarea
+								className="input-title"
+								name="title"
+								id="title"
+								value={title}
+								onChange={(event) => {
+									const input = event.target;
+									input.style.height = "0px";
+									const scrollHeight = input.scrollHeight;
+									input.style.height = scrollHeight + "px";
+									setTitle(event.target.value);
+								}}
+								rows={1}
+							/>
+						</h1>
+					</div>
 
-				<div className="page-file-music-info">
-					<div className="page-file-music-date">
-						<p>Fecha: {props._creationDate}</p>
+					<div className="page-file-music-info">
+						<div className="page-file-music-date">
+							<p>Fecha: {props._creationDate}</p>
+						</div>
+						<div className="page-file-music-autor">
+							<label className="label-info" htmlFor="autor">
+								<span> Autor: </span>
+							</label>
+							<input
+								className="input-autor"
+								type="text"
+								name="autor"
+								id="autor"
+								value={autor}
+								onChange={(event) => {
+									setAutor(event.target.value);
+								}}
+							/>
+						</div>
+						<div className="page-file-music-album">
+							<label className="label-info" htmlFor="album">
+								<span> Album: </span>
+							</label>
+							<input
+								className="input-album"
+								type="text"
+								name="album"
+								id="album"
+								value={album}
+								onChange={(event) => {
+									setAlbum(event.target.value);
+								}}
+							/>
+						</div>
 					</div>
-					<div className="page-file-music-autor">
-						<label className="label-info" htmlFor="autor">
-							<span> Autor: </span>
-						</label>
-						<input
-							className="input-autor"
-							type="text"
-							name="autor"
-							id="autor"
-							value={autor}
-							onChange={(event) => {
-								setAutor(event.target.value);
-							}}
-						/>
-					</div>
-					<div className="page-file-music-album">
-						<label className="label-info" htmlFor="album">
-							<span> Album: </span>
-						</label>
-						<input
-							className="input-album"
-							type="text"
-							name="album"
-							id="album"
-							value={album}
-							onChange={(event) => {
-								setAlbum(event.target.value);
-							}}
-						/>
-					</div>
-				</div>
-			</header>
-			<main className="page-file-music-main">
-				<Metronome
-					compassInit={props._music._metronome.compass}
-					customMetronome={{
-						bpm: props._music._metronome.bpm,
-						compass: props._music._metronome.compass,
-						statePoinst: arrayStatesToArrayPoints(
-							props._music._metronome.statePoints
-						),
-					}}
-				/>
-				<section className="container-structure">
-					<div className="container-structure-info">
-						<p>Structure</p>
-						<button
-							className="button"
-							id="button-lock"
-							onClick={() => {
-								setReadOnly(!readOnly);
-							}}
-						>
-							{readOnly ? (
-								<Icon paths={iconsPaths.lockFill} width={16} height={16} />
-							) : (
-								<Icon paths={iconsPaths.unlockFill} width={16} height={16} />
-							)}
-						</button>
-					</div>
-					<textarea
-						className="textarea-structure"
-						id="structure"
-						value={estructura}
-						onChange={(event) => {
-							setEstructura(event.target.value);
+				</header>
+				<main className="page-file-music-main">
+					<Metronome
+						compassInit={props._music._metronome.compass}
+						customMetronome={{
+							bpm: props._music._metronome.bpm,
+							compass: props._music._metronome.compass,
+							statePoinst: arrayStatesToArrayPoints(
+								props._music._metronome.statePoints
+							),
 						}}
-						readOnly={readOnly}
 					/>
-				</section>
-			</main>
-			{guardando && <Loading />}
+					<section className="container-structure">
+						<div className="container-structure-info">
+							<p>Structure</p>
+							<button
+								className="button"
+								id="button-lock"
+								onClick={() => {
+									setReadOnly(!readOnly);
+								}}
+							>
+								{readOnly ? (
+									<Icon paths={iconsPaths.lockFill} width={16} height={16} />
+								) : (
+									<Icon paths={iconsPaths.unlockFill} width={16} height={16} />
+								)}
+							</button>
+						</div>
+						<textarea
+							className="textarea-structure"
+							id="structure"
+							value={estructura}
+							onChange={(event) => {
+								setEstructura(event.target.value);
+							}}
+							readOnly={readOnly}
+						/>
+					</section>
+				</main>
+				{guardando && <Loading />}
+			</div>
 		</div>
 	);
 };

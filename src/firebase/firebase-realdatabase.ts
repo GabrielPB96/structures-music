@@ -4,7 +4,6 @@ import {
 	getDatabase,
 	ref,
 	set,
-	onValue,
 	remove,
 	get,
 	child,
@@ -12,7 +11,6 @@ import {
 import { File } from "../models/structure-files/file.class";
 
 import { Folder } from "../models/structure-files/folder.class";
-import { UserAuth } from "../models/user-auth";
 //import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -59,16 +57,6 @@ export async function createUser(uid: string, email: string) {
 		uid,
 		email,
 		directory: JSON.parse(JSON.stringify(directory)),
-	});
-}
-
-async function readUser(idUser: string) {
-	return new Promise<UserAuth>((solve, reject) => {
-		const userRef = ref(db, `${PATH_USERS}${idUser}`);
-		onValue(userRef, (snapshot) => {
-			const data = snapshot.val();
-			solve(data);
-		});
 	});
 }
 

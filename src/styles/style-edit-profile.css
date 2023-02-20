@@ -14,13 +14,13 @@
 	height: 100%;
 
 	display: grid;
+	grid-template-rows: auto 1fr;
 	justify-items: center;
 	align-items: center;
 }
 
 .edit-profile-container-form form {
-	display: flex;
-	flex-direction: column;
+	max-width: 450px;
 	gap: 2rem;
 
 	color: #eee;
@@ -40,6 +40,18 @@
 	justify-items: center;
 }
 
+.container-card-profile {
+	height: 100%;
+	width: 100%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+
 .container-buttons {
 	width: 100%;
 	display: flex;
@@ -51,7 +63,7 @@ label {
 	width: 100%;
 	margin-bottom: 0.5rem;
 
-	text-align: center;
+	text-align: left;
 }
 
 @media (min-width: 650px) {

@@ -1,8 +1,27 @@
-.page-file-music {
+.page-file {
 	width: 100%;
 	min-height: 100%;
 	display: grid;
 	grid-template-rows: auto 1fr;
+	justify-items: center;
+	padding: .5rem;
+	gap: .5rem;
+}
+.page-file-buttons {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.page-file-music {
+	width: 100%;
+	max-width: 630px;
+	min-height: 100%;
+	display: grid;
+	grid-template-rows: auto 1fr;
+
+	border-radius: 10px;
+	background-color: #928e88;
 }
 
 .page-file-music-header {
@@ -18,35 +37,16 @@
 .container-title {
 	width: 100%;
 	display: grid;
-	grid-template-columns: repeat(3, 33%);
-	grid-template-rows: repeat(2, auto);
+	justify-items: center;
+	align-items: center;
 }
 .container-title h1 {
-	grid-row: 2 / 3;
-	grid-column: 1 / 4;
-}
-.container-title .back-button,
-.container-title .save-button {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	padding-top: 0.5rem;
+	max-width: 600px;
 }
 
-.container-title .back-button {
-	grid-row: 1 / 2;
-	grid-column: 1 / 2;
-	justify-content: start;
-	padding-left: 0.5rem;
-}
-
-.container-title .save-button {
-	grid-row: 1 / 2;
-	grid-column: 3 / 4;
-	justify-content: end;
-}
 .page-file-music-info {
 	width: 100%;
+	max-width: 600px;
 	display: grid;
 	gap: 5px;
 }
@@ -76,12 +76,15 @@
 	justify-items: center;
 	gap: 5px;
 
-	padding: .5rem;
+	padding: 0.5rem;
 }
 .container-structure-info {
 	width: 100%;
+	max-width: 550px;
 	display: flex;
 	justify-content: space-between;
+
+	font-weight: bold;
 }
 .container-structure textarea {
 	max-width: 550px;
@@ -123,6 +126,9 @@
 
 	font-size: 2rem;
 	text-align: center;
+
+	border: none;
+	resize: none;
 }
 
 .input-autor:focus,
