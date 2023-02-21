@@ -1,3 +1,3 @@
 # structures-music
 
-[beta testing](https://6bxwtl-5173.preview.csb.app)
+[beta testing](https://music-structures.web.app/)
