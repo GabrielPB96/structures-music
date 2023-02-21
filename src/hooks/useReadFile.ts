@@ -35,6 +35,7 @@ export function useReadFile() {
 					content: [...list],
 				};
 			} else {
+				directoryStorage.current = null;
 				if (data._type === "file") {
 					newStateContent = {
 						state: StateReadFile.FILE,
@@ -83,7 +84,7 @@ export function useReadFile() {
 	const resetDirectory = () => {
 		if (directoryStorage.current) {
 			setDirectory({
-				state: directory.state,
+				state: StateReadFile.FOLDER,
 				content: [...directoryStorage.current],
 			});
 		} else {

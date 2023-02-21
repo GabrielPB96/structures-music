@@ -1,41 +1,23 @@
-//import Metronome from "./components/metronome/components/container/metronome";
-import MenuBar from "../../../components/pure/menubar";
-
 //styles
 import "../../../styles/style-files.css";
 
 //firebase
-//import { readDoc, readExactProperty } from "../../../firebase/firebase-utils";
 import { removeFileWithPath } from "../../../firebase/firebase-realdatabase";
+
 //react
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 //react router
 import AuthContext from "../../../context/AuthContext";
 import CreateFolder from "../../../components/pure/modal-create-folder";
-import Loading from "../../../components/pure/loading";
 
-import {
-	createFolderWithPath,
-	lastFileFromUrl,
-	StateReadFile,
-} from "../../../utils/utils";
+import { createFolderWithPath, StateReadFile } from "../../../utils/utils";
 import ConfirmModal from "../../../components/pure/confirm-modal";
 import FileContentView from "../../../components/pure/file-contentview";
-import ListOfFiles from "../../../components/container/list-of-files";
-import EmptyDirectory from "../../../components/pure/empty-directory";
 import { MetronomeProvider } from "../../../context/MetronomeContext";
 
 import { useReadFile } from "../../../hooks/useReadFile";
-import SearchEmpty from "../../../components/pure/search-empty";
-
-const Header = ({ title }: { title: string }) => {
-	return (
-		<header className="header-app header-files">
-			<h1>{title}</h1>
-		</header>
-	);
-};
+import FolderPage from "../../../components/container/folder-page";
 
 const FilesPage = () => {
 	const { pathFile } = useContext(AuthContext);
@@ -54,7 +36,7 @@ const FilesPage = () => {
 		}
 	};
 
-	const hadleRemove = async (absolutePath: string) => {
+	const handleRemove = async (absolutePath: string) => {
 		setCurrentPath(absolutePath);
 		setModalConfirmRemove(true);
 	};
@@ -67,29 +49,13 @@ const FilesPage = () => {
 	return (
 		<>
 			{directory.state !== StateReadFile.FILE ? (
-				<div className="page">
-					<Header title={lastFileFromUrl(pathFile) || ""} />
-
-					<MenuBar
-						newFolder={setModalCreate}
-						search={search}
-						resetDirectory={resetDirectory}
-					/>
-					<main className="main-app main-files-user">
-						{directory.state === StateReadFile.LOADING ? (
-							<Loading />
-						) : directory.state === StateReadFile.FOLDER ? (
-							<ListOfFiles
-								directory={directory.content}
-								actionRemove={hadleRemove}
-							/>
-							) : (
-									directory.state === StateReadFile.SEARCH_EMPTY ? 
-										<SearchEmpty /> :
-							<EmptyDirectory />
-						)}
-					</main>
-				</div>
+				<FolderPage
+					directory={directory}
+					search={search}
+					handleRemove={handleRemove}
+					setModalCreate={setModalCreate}
+					resetDirectory={resetDirectory}
+				/>
 			) : (
 				<MetronomeProvider>
 					<FileContentView props={directory.content} />
